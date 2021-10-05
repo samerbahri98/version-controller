@@ -1,0 +1,26 @@
+version: '3.3'
+
+services: 
+  # git
+  git:
+    build: ./git/
+    image: git
+    container_name: git
+    hostname: git-ssh-server
+    restart: unless-stopped
+    ports:
+      - 22:22
+    networks:
+      - app-network
+    volumes: 
+      - git-storage:/var/git
+
+
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  git-storage:
+  git-data:
