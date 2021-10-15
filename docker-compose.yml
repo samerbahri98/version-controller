@@ -9,6 +9,7 @@ services:
     hostname: git-ssh-server
     restart: unless-stopped
     ports:
+      - 80:80
       - 22:22
     networks:
       - app-network

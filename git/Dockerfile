@@ -45,10 +45,12 @@ RUN chgrp -R www-data /var/git
 
 RUN htpasswd -b -c /var/git/.htpasswd git git
 
-RUN service apache2 start
+RUN service apache2 restart
 
 RUN service ssh start
 
 EXPOSE 22
+
+EXPOSE 80
 
 CMD ["/usr/sbin/sshd","-D"]
