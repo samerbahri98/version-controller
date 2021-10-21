@@ -14,7 +14,34 @@ services:
     networks:
       - app-network
     volumes: 
-      - git-storage:/var/git
+      - ./git/vol/:/var/git
+  queue:
+    image: "redis:alpine"
+    container_name: queue
+    volumes:
+      - ./data:/data
+    networks:
+      - app-network
+    ports:
+      - 6379:6379
+  worker-queue:
+    build: ./worker-queue/
+    image: worker-queue
+    restart: always
+    container_name: worker-queue
+    volumes:
+      - ./worker-queue:/var/www/worker-queue
+    networks:
+      - app-network
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+    links:
+      - queue
+    ports:
+      - '3000:3000'
+    command: sh -c 'npm i && npm run start'
+
 
 
 
