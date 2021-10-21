@@ -53,4 +53,6 @@ EXPOSE 22
 
 EXPOSE 80
 
+WORKDIR /var/git
+
 CMD ["/usr/sbin/sshd","-D"]

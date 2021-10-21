@@ -35,8 +35,13 @@ services:
       - app-network
     environment:
       - NODE_ENV=development
+      - REDIS_URL=queue
+      - REDIS_PORT=6379
+      - GIT_CONTAINER=git
       - PORT=3000
     links:
+      - queue
+    depends_on:
       - queue
     ports:
       - '3000:3000'
