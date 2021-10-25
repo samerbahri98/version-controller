@@ -49,11 +49,17 @@ services:
   db:
     image: postgres
     restart: always
+    volumes:
+      - ./setup/db:/setup
+    networks:
+      - app-network
     environment:
       - POSTGRES_PASSWORD=example
   # adminer is a  GUI for database, do not use for production
   adminer:
     image: adminer
+    networks:
+      - app-network
     restart: always
     ports:
       - 8080:8080
