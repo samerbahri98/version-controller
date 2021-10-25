@@ -46,7 +46,17 @@ services:
     ports:
       - '3000:3000'
     command: sh -c 'npm i && npm run start'
-
+  db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=example
+  # adminer is a  GUI for database, do not use for production
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
 
 
 
