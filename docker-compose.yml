@@ -19,7 +19,7 @@ services:
     image: "redis:alpine"
     container_name: queue
     volumes:
-      - ./data:/data
+      - ./data/queue:/data
     networks:
       - app-network
     ports:
@@ -48,16 +48,20 @@ services:
     command: sh -c 'npm i && npm run start'
   db:
     image: postgres
+    container_name: db
     restart: always
     volumes:
       - ./setup/db:/setup
+      - ./data/pg:/var/lib/postgresql/data
     networks:
       - app-network
     environment:
       - POSTGRES_PASSWORD=example
+      - PGDATA=/var/lib/postgresql/data
   # adminer is a  GUI for database, do not use for production
   adminer:
     image: adminer
+    container_name: adminer
     networks:
       - app-network
     restart: always
