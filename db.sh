@@ -1,3 +1,8 @@
 #! /bin/bash
 
-docker exec -it 71d2eb245ed9 psql -U postgres -f /setup/db.sql
+docker exec -it db psql -U postgres -f /setup/db.sql
+
+if [ "$1" = "mock" ]
+then
+    docker exec -it db psql -U postgres -f /setup/dummydata.sql
+fi
