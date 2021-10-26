@@ -3,3 +3,4 @@ queue/data
 worker-queue/node_modules
 git/vol
 git/vol/*
+data
