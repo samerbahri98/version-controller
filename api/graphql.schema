@@ -1,0 +1,51 @@
+# User
+type User{
+     id: ID!
+     firstName: String!
+     lastName: String!
+     userName: String!
+     email: String!
+     attributionTag: String!
+     phone: String!
+     created_at: timestamptz!
+     ownedRepositories:[Repository]!
+}
+
+type Download{
+     ssh: String!
+     http: String!
+}
+
+type Repository{
+     id: ID!
+     name: String!
+     attribution: String!
+     created_at: timestamptz!
+     created_by: User!
+     download: Download!
+}
+
+type Login{
+     token: String!
+     user: User!
+}
+
+type Query{
+     login(email: String!, password:String!): Login
+     auth(token: String!): Login
+     user(id: String!): User
+     repository(id: String!): Repository
+}
+
+type Mutation{
+     register(
+        firstName:String!
+        lastName:String!
+        userName:String!
+        email:String!
+        password: String!
+        phone: String
+     ): Login
+     createRepository(name: String): Repository
+
+}

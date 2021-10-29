@@ -3,7 +3,7 @@ version: '3.3'
 services: 
   # git
   git:
-    build: ./git/
+    build: ./DockerImages/git/
     image: git
     container_name: git
     hostname: git-ssh-server
@@ -25,12 +25,12 @@ services:
     ports:
       - 6379:6379
   worker-queue:
-    build: ./worker-queue/
-    image: worker-queue
+    build: ./DockerImages/node/
+    image: node
     restart: always
     container_name: worker-queue
     volumes:
-      - ./worker-queue:/var/www/worker-queue
+      - ./worker-queue:/var/www/app
     networks:
       - app-network
     environment:
@@ -67,6 +67,28 @@ services:
     restart: always
     ports:
       - 8080:8080
+  api:
+    build: ./DockerImages/node/
+    image: node
+    restart: always
+    container_name: api
+    volumes:
+      - ./api:/var/www/app
+    networks:
+      - app-network
+    environment:
+      - NODE_ENV=development
+      - REDIS_URL=queue
+      - REDIS_PORT=6379
+      - GIT_CONTAINER=git
+      - PORT=1337
+    links:
+      - queue
+    depends_on:
+      - queue
+    ports:
+      - '1337:1337'
+    command: sh -c 'npm i && npm run start'
 
 
 
