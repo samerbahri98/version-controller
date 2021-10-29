@@ -1,0 +1,22 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "samer bahri<samer.bahri@edu.bme.hu>",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-express": "^3.4.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "graphql": "^15.7.2",
+    "helmet": "^4.6.0",
+    "morgan": "^1.10.0",
+    "npm": "^8.1.2"
+  }
+}
