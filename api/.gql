@@ -1,0 +1,19 @@
+type User{
+    id: ID!
+    firstName: String!
+    lastName: String!
+    userName: String!
+    email: String!
+    attributionTag: String!
+    phone: String!
+    created_at: timestamptz!
+}
+
+type Login{
+     token: String!
+     user: User!
+}
+
+type Query{
+     login(email: String!, password:String!): Login
+}

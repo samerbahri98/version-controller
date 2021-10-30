@@ -20,7 +20,7 @@ BEGIN;
     );
 
 
-    CREATE OR REPLACE FUNCTION validate_user(_email email, _password TEXT) RETURNS TABLE (userid uuid,first_name TEXT,last_name TEXT,username TEXT,phone TEXT, lock INTEGER )
+    CREATE OR REPLACE FUNCTION validate_user(_email email, _password TEXT) RETURNS TABLE (userid uuid,first_name TEXT,last_name TEXT,username TEXT,phone TEXT, lock INTEGER, created_at TIMESTAMP )
     LANGUAGE plpgsql
     AS $$
         DECLARE
@@ -32,10 +32,11 @@ BEGIN;
                    last_name TEXT,
                    username TEXT,
                    phone TEXT,
-                   lock INTEGER
+                   lock INTEGER,
+                   created_at TIMESTAMP
             );
             INSERT INTO tempuser
-            SELECT user_data.user_id,user_data.first_name,user_data.last_name,user_data.username,user_data.phone,user_data.lock
+            SELECT user_data.user_id,user_data.first_name,user_data.last_name,user_data.username,user_data.phone,user_data.lock,user_data.created_at
             FROM user_data
             WHERE email=_email AND password = crypt(_password,password);
             SELECT COUNT(*) INTO COUNTER FROM tempuser;
