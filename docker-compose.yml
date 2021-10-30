@@ -27,6 +27,8 @@ services:
   worker-queue:
     build: ./DockerImages/node/
     image: node
+    env_file: 
+      - .env
     restart: always
     container_name: worker-queue
     volumes:
@@ -34,10 +36,10 @@ services:
     networks:
       - app-network
     environment:
-      - NODE_ENV=development
-      - REDIS_URL=queue
-      - REDIS_PORT=6379
-      - GIT_CONTAINER=git
+      # - NODE_ENV=development
+      # - REDIS_URL=queue
+      # - REDIS_PORT=6379
+      # - GIT_CONTAINER=git
       - PORT=3000
     links:
       - queue
@@ -48,6 +50,8 @@ services:
     command: sh -c 'npm i && npm run start'
   db:
     image: postgres
+    env_file: 
+      - .env
     container_name: db
     restart: always
     volumes:
@@ -55,9 +59,9 @@ services:
       - ./data/pg:/var/lib/postgresql/data
     networks:
       - app-network
-    environment:
-      - POSTGRES_PASSWORD=example
-      - PGDATA=/var/lib/postgresql/data
+    # environment:
+    #   - POSTGRES_PASSWORD=example
+    #   - PGDATA=/var/lib/postgresql/data
   # adminer is a  GUI for database, do not use for production
   adminer:
     image: adminer
@@ -69,6 +73,8 @@ services:
       - 8080:8080
   api:
     build: ./DockerImages/node/
+    env_file: 
+      - .env
     image: node
     restart: always
     container_name: api
@@ -77,10 +83,6 @@ services:
     networks:
       - app-network
     environment:
-      - NODE_ENV=development
-      - REDIS_URL=queue
-      - REDIS_PORT=6379
-      - GIT_CONTAINER=git
       - PORT=1337
     links:
       - queue
