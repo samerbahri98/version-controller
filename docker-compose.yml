@@ -90,7 +90,7 @@ services:
       - queue
     ports:
       - '1337:1337'
-    command: sh -c 'npm i && npm run start'
+    command: sh -c 'npm i && npm run compile && npm run start'
 
 
 
