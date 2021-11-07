@@ -8,6 +8,7 @@ import {
 import cors from "cors";
 import helmet from "helmet";
 import { buildSchema } from "type-graphql";
+import { db } from "./middlewares/db";
 import { RegisterResolver } from "./graphql/User/Register";
 const morgan = require("morgan");
 
@@ -15,8 +16,14 @@ const morgan = require("morgan");
 	const app = express();
 
 	// MIDDLEWARES
+	await db;
 	app.use(cors());
-	app.use(helmet({ contentSecurityPolicy: (process.env.NODE_ENV === 'production') ? undefined : false }));
+	app.use(
+		helmet({
+			contentSecurityPolicy:
+				process.env.NODE_ENV === "production" ? undefined : false,
+		})
+	);
 	app.use(morgan("dev"));
 
 	// GRAPHQL

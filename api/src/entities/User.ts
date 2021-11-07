@@ -1,25 +1,26 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, createQueryBuilder, RelationId } from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 import { IUser } from "../interfaces/IUser";
 
 @ObjectType()
-@Entity()
+@Entity({name:"user_data"})
 export class User extends BaseEntity implements IUser {
+
 	@Field(() => ID)
-	@PrimaryGeneratedColumn()
-	id?: string;
+	@PrimaryGeneratedColumn("uuid")
+	user_id?: string;
 
 	@Field()
 	@Column()
-	firstName?: string;
+	first_name?: string;
 
 	@Field()
 	@Column()
-	lastName?: string;
+	last_name?: string;
 
 	@Field()
 	@Column()
-	userName?: string;
+	username?: string;
 
 	@Field()
 	@Column()
@@ -30,12 +31,13 @@ export class User extends BaseEntity implements IUser {
 
 	@Field()
 	@Column()
-	createdAt?: Date;
+	created_at?: Date;
 
 	@Field()
-	attributionTag?: string;
+	attribution_tag?: string;
 
 	@Field()
 	@Column()
 	phone?: string;
+	
 }
