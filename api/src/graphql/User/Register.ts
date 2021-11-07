@@ -1,5 +1,4 @@
 import {
-	Arg,
 	Args,
 	ArgsType,
 	Field,
@@ -16,13 +15,13 @@ import { IUser } from "../../interfaces/IUser";
 @ArgsType()
 class RegisterArgs implements IUser {
 	@Field()
-	firstName!: string;
+	first_name!: string;
 
 	@Field()
-	lastName!: string;
+	last_name!: string;
 
 	@Field()
-	userName!: string;
+	username!: string;
 
 	@Field()
 	email!: string;
@@ -31,51 +30,40 @@ class RegisterArgs implements IUser {
 	password!: string;
 
 	@Field()
-	createdAt!: Date;
-
-	@Field()
-	attributionTag!: string;
-
-	@Field()
 	phone!: string;
 }
 
 @Resolver(User)
 export class RegisterResolver {
 	@Query(() => String)
-	async hello() {
+	async login() {
 		return "Hello World!";
 	}
+
 	@FieldResolver()
-	async attributionTag(@Root() parent: User) {
-		return `${parent.userName}<${parent.email}>`;
+	async attribution_tag(@Root() parent: User) {
+		return `${parent.username}<${parent.email}>`;
 	}
 
 	@Mutation(() => User)
 	async register(
 		@Args()
-		{
-			firstName,
-			lastName,
-			userName,
-			email,
-			password,
-			phone,
-			createdAt,
-		}: RegisterArgs
+		{ first_name, last_name, username, email, password, phone }: RegisterArgs
 	): Promise<User> {
 		const hashedPassword = await bcrypt.hash(password, 12);
-
 		const user = await User.create({
-			firstName,
-			lastName,
+			first_name,
+			last_name,
 			email,
 			password: hashedPassword,
-			userName,
-			phone,
-			createdAt: Date.toString(),
+			username,
+			phone
 		}).save();
 
+		
+
+		//TODO: Create folder for repositories
+		
 		return user;
 	}
 }

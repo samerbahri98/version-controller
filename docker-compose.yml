@@ -80,6 +80,7 @@ services:
     container_name: api
     volumes:
       - ./api:/var/www/app
+      - ./logs/api:/root/.npm/_logs
     networks:
       - app-network
     environment:
@@ -90,7 +91,7 @@ services:
       - queue
     ports:
       - '1337:1337'
-    command: sh -c 'npm i && npm run compile && npm run start'
+    command: sh -c 'npm install && npm run compile && npm run start'
 
 
 

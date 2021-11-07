@@ -5,6 +5,8 @@ git/vol
 git/vol/*
 data
 api/node_modules
+api/dist
 api.bak
 api.bak2
 api.bak3
+logs

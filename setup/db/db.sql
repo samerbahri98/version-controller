@@ -20,7 +20,8 @@ BEGIN;
     );
 
 
-    CREATE OR REPLACE FUNCTION validate_user(_email email, _password TEXT) RETURNS TABLE (userid uuid,first_name TEXT,last_name TEXT,username TEXT,phone TEXT, lock INTEGER, created_at TIMESTAMP )
+    CREATE OR REPLACE FUNCTION validate_user(_email email, _password TEXT) 
+    RETURNS TABLE (userid uuid,first_name TEXT,last_name TEXT,username TEXT,phone TEXT, lock INTEGER, created_at TIMESTAMP )
     LANGUAGE plpgsql
     AS $$
         DECLARE
@@ -49,14 +50,28 @@ BEGIN;
     $$ ;
 
 
-    CREATE OR REPLACE PROCEDURE create_user(_first_name TEXT,_last_name TEXT, _username TEXT, _email email, _password TEXT, _phone TEXT)
-    LANGUAGE SQL
+    CREATE OR REPLACE FUNCTION create_user(_first_name TEXT,_last_name TEXT, _username TEXT, _email email, _password TEXT, _phone TEXT)
+    RETURNS TABLE (userid uuid,first_name TEXT,last_name TEXT,username TEXT,phone TEXT, created_at TIMESTAMP )
+    LANGUAGE plpgsql
     AS $$
-        INSERT INTO user_data(first_name,last_name,username, email,password,phone)
-        VALUES (_first_name,_last_name,_username,_email,crypt(_password,gen_salt('bf')),_phone)
+        BEGIN
+                CREATE TEMP TABLE tempuser (
+                user_id uuid,
+                first_name TEXT,
+                last_name TEXT,
+                username TEXT,
+                phone TEXT,
+                created_at TIMESTAMP
+                );
+                INSERT INTO user_data(first_name,last_name,username, email,password,phone)
+                VALUES (_first_name,_last_name,_username,_email,crypt(_password,gen_salt('bf')),_phone);
+                INSERT INTO tempuser
+                SELECT user_data.user_id,user_data.first_name,user_data.last_name,user_data.username,user_data.phone,user_data.created_at
+                FROM user_data
+                WHERE email=_email AND password = crypt(_password,password);
+            RETURN QUERY SELECT * FROM tempuser;
+        END
     $$;
-
-
 
     CREATE TABLE repositories(
         repository_id uuid DEFAULT uuid_generate_v4 (),
