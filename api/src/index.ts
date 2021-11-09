@@ -10,6 +10,7 @@ import helmet from "helmet";
 import { buildSchema } from "type-graphql";
 import { db } from "./middlewares/db";
 import { RegisterResolver } from "./graphql/User/Register";
+import { redisClient } from "./middlewares/redis";
 const morgan = require("morgan");
 
 (async () => {
@@ -17,6 +18,7 @@ const morgan = require("morgan");
 
 	// MIDDLEWARES
 	await db;
+	await redisClient;
 	app.use(cors());
 	app.use(
 		helmet({
