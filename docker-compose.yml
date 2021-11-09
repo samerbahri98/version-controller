@@ -47,7 +47,7 @@ services:
       - queue
     ports:
       - '3000:3000'
-    command: sh -c 'npm i && npm run start'
+    command: sh -c 'npm install && npm run compile && npm run start'
   db:
     image: postgres
     env_file: 
@@ -71,6 +71,20 @@ services:
     restart: always
     ports:
       - 8080:8080
+  redis-commander:
+    image: rediscommander/redis-commander
+    container_name: redis-commander
+    networks:
+      - app-network
+    restart: always
+    links:
+      - queue
+    depends_on:
+      - queue
+    environment:
+      - REDIS_HOSTS=queue:6379
+    ports:
+      - 8081:8081
   api:
     build: ./DockerImages/node/
     env_file: 
@@ -80,7 +94,6 @@ services:
     container_name: api
     volumes:
       - ./api:/var/www/app
-      - ./logs/api:/root/.npm/_logs
     networks:
       - app-network
     environment:

@@ -9,11 +9,15 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 ENV TZ=Europe/Budapest
 
-RUN apt-get update && apt-get install -y tzdata
+RUN apt-get update && apt-get install -y tzdata sudo
 
 RUN mkdir /var/git
 
 RUN apt-get update && apt-get install -y git
+
+RUN mkdir /var/actions
+
+COPY ./run.sh /var/actions/run.sh
 
 RUN addgroup git
 
@@ -22,6 +26,14 @@ RUN useradd -p $(openssl passwd -1 1234) -g git git
 RUN mkhomedir_helper git
 
 RUN chown git:git /var/git
+
+RUN chown -R git:git /var/actions
+
+RUN usermod -aG sudo git
+
+RUN chmod -R 700 /var/actions
+
+RUN echo "git ALL = NOPASSWD: /bin/systemctl restart httpd.service, /var/actions/run.sh" >>  /etc/sudoers 
 
 RUN apt-get update && apt-get install -y openssh-server
 

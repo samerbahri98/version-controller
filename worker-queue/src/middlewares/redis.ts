@@ -11,3 +11,15 @@ export const redisClient = redis
 	.on("ready", (err) => {
 		console.log("ready");
 	});
+
+	export const redisSubscriber = redis
+	.createClient(Number(process.env.REDIS_PORT), process.env.REDIS_URL)
+	.on("error", (err) => {
+		console.log("error", err);
+	})
+	.on("connect", (err) => {
+		console.log("connect");
+	})
+	.on("ready", (err) => {
+		console.log("ready");
+	});

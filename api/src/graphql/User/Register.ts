@@ -11,6 +11,10 @@ import {
 import { User } from "../../entities/User";
 import * as bcrypt from "bcryptjs";
 import { IUser } from "../../interfaces/IUser";
+import fs from "fs";
+import path from "path";
+import { QueueNode } from "../../services/QueueNode";
+import { status } from "../../interfaces/IQueueNode";
 
 @ArgsType()
 class RegisterArgs implements IUser {
@@ -57,13 +61,22 @@ export class RegisterResolver {
 			email,
 			password: hashedPassword,
 			username,
-			phone
+			phone,
 		}).save();
 
-		
-
 		//TODO: Create folder for repositories
-		
+		await new QueueNode()
+			.set({
+				action: "user",
+				arguments: "create",
+				flags: [
+					{ name: "-u", value: username },
+					{ name: "-p", value: password },
+				],
+				status: status.TODO,
+			})
+			.deploy();
+
 		return user;
 	}
 }
