@@ -1,82 +1,139 @@
 import {
-	Args,
-	ArgsType,
-	Field,
-	FieldResolver,
-	Mutation,
-	Query,
-	Resolver,
-	Root,
+  Args,
+  ArgsType,
+  Field,
+  FieldResolver,
+  Mutation,
+  Query,
+  Resolver,
+  ResolverInterface,
+  Root,
 } from "type-graphql";
 import { User } from "../../entities/User";
+import { Auth } from "../../entities/Auth";
 import * as bcrypt from "bcryptjs";
 import { IUser } from "../../interfaces/IUser";
-import fs from "fs";
-import path from "path";
 import { QueueNode } from "../../services/QueueNode";
 import { status } from "../../interfaces/IQueueNode";
+import {
+  IsEmail,
+  Length,
+  IsMobilePhone,
+  Matches,
+  IsString,
+} from "class-validator";
+import { Match } from "../../config/match.decorator";
+
+@ArgsType()
+class LoginArgs {
+  @Field()
+  @IsEmail()
+  @Length(6, 250)
+  email!: string;
+
+  @Field()
+  @Length(6, 250)
+  @IsString()
+  password!: string;
+}
 
 @ArgsType()
 class RegisterArgs implements IUser {
-	@Field()
-	first_name!: string;
+  @Field()
+  @Length(1, 250)
+  @IsString()
+  first_name!: string;
 
-	@Field()
-	last_name!: string;
+  @Field()
+  @Length(1, 250)
+  @IsString()
+  last_name!: string;
 
-	@Field()
-	username!: string;
+  @Field()
+  @Length(1, 250)
+  @IsString()
+  username!: string;
 
-	@Field()
-	email!: string;
+  @Field()
+  @IsEmail()
+  @Length(6, 250)
+  email!: string;
 
-	@Field()
-	password!: string;
+  @Field()
+  @Length(6, 250)
+  @IsString()
+  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+    message: "password too weak",
+  })
+  password!: string;
 
-	@Field()
-	phone!: string;
+  //   @Field()
+  //   @Length(6, 250)
+  //   @IsString()
+  //   @Match("password")
+  //   passwordConfirmation!: string;
+
+  @Field()
+  @IsMobilePhone()
+  phone!: string;
 }
 
-@Resolver(User)
-export class RegisterResolver {
-	@Query(() => String)
-	async login() {
-		return "Hello World!";
-	}
+@Resolver((of) => Auth)
+export class RegisterResolver implements ResolverInterface<Auth> {
+  @FieldResolver()
+  async accessToken(@Root() parent: Auth) {
+    return Auth.createAccessToken(parent.user);
+  }
 
-	@FieldResolver()
-	async attribution_tag(@Root() parent: User) {
-		return `${parent.username}<${parent.email}>`;
-	}
+  @FieldResolver()
+  async refreshToken(@Root() parent: Auth) {
+    return Auth.createRefreshToken(parent.user);
+  }
 
-	@Mutation(() => User)
-	async register(
-		@Args()
-		{ first_name, last_name, username, email, password, phone }: RegisterArgs
-	): Promise<User> {
-		const hashedPassword = await bcrypt.hash(password, 12);
-		const user = await User.create({
-			first_name,
-			last_name,
-			email,
-			password: hashedPassword,
-			username,
-			phone,
-		}).save();
+  @Query(() => Auth)
+  async login(@Args() { email, password }: LoginArgs): Promise<Auth> {
+    // const hashedPassword = await bcrypt.hash(password, 12);
+    const user = await User.findOne({ where: { email: email } });
+    if (!user) throw new Error("user doesn't exit");
+    if (!(await bcrypt.compare(password, user.password || "")))
+      throw new Error("password is wrong");
 
-		//TODO: Create folder for repositories
-		await new QueueNode()
-			.set({
-				action: "user",
-				arguments: "create",
-				flags: [
-					{ name: "-u", value: username },
-					{ name: "-p", value: password },
-				],
-				status: status.TODO,
-			})
-			.deploy();
+    const accessToken = Auth.createAccessToken(user);
 
-		return user;
-	}
+    return Auth.create(user);
+  }
+
+  @Mutation(() => Auth)
+  async register(
+    @Args()
+    { first_name, last_name, username, email, password, phone }: RegisterArgs
+  ): Promise<Auth> {
+    const salt = await bcrypt.genSalt(12);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    const user = await User.create({
+      first_name,
+      last_name,
+      email,
+      password: hashedPassword,
+      username,
+      phone,
+    }).save();
+
+    // const auth = Auth.create(user);
+
+    //TODO: Create folder for repositories
+    await new QueueNode()
+      .set({
+        action: "user",
+        arguments: "create",
+        flags: [
+          { name: "-u", value: username },
+          { name: "-p", value: password },
+        ],
+        status: status.TODO,
+      })
+      .deploy();
+
+    return Auth.create(user);
+  }
 }

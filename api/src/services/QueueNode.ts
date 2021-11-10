@@ -1,6 +1,6 @@
 import { flag, IQueueNode, status } from "../interfaces/IQueueNode";
 import { v4 } from "uuid";
-import { redisClient } from "../middlewares/redis";
+import { redisClient } from "../config/redis";
 import { resolve } from "path/posix";
 import { type } from "os";
 
