@@ -79,6 +79,7 @@ BEGIN;
         created_by uuid NOT NULL,
         created_at TIMESTAMP DEFAULT current_timestamp,
         CONSTRAINT created_by_id_ FOREIGN KEY(created_by) REFERENCES user_data(user_id),
+        CONSTRAINT unique_repo_per_user UNIQUE(repository_name,created_by),
         PRIMARY KEY (repository_id)
     );
 END TRANSACTION;
