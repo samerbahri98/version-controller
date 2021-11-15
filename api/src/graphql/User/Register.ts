@@ -28,6 +28,7 @@ import { Match } from "../../config/match.decorator";
 import { IsAuth } from "../../middlewares/IsAuth";
 import { IContext } from "../../interfaces/IContext";
 import { AuthenticationError } from "apollo-server-errors";
+import { Ssh } from "../../services/Ssh";
 
 @ArgsType()
 class LoginArgs {
@@ -131,20 +132,13 @@ export class RegisterResolver implements ResolverInterface<Auth> {
 			username,
 			phone,
 		}).save();
-
-		//TODO: Create folder for repositories in SSH
-		await new QueueNode()
-			.set({
-				action: "user",
-				arguments: "create",
-				flags: [
-					{ name: "-u", value: username },
-					{ name: "-p", value: password },
-				],
-				status: status.TODO,
-			})
-			.deploy();
-
+		
+		await Ssh({
+			command: "user",
+			argument: "create",
+			password,
+			username,
+		});
 		return Auth.create(user);
 	}
 }
