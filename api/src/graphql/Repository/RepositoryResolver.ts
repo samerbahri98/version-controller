@@ -12,12 +12,10 @@ import {
 	Ctx,
 } from "type-graphql";
 import { Repo } from "../../entities/Repo";
-import { Length } from "class-validator";
 import { User } from "../../entities/User";
-import { Repository } from "typeorm";
-import { InjectRepository } from "typeorm-typedi-extensions";
 import { IsAuth } from "../../middlewares/IsAuth";
 import { IContext } from "../../interfaces/IContext";
+import { Ssh } from "../../services/Ssh";
 
 @Resolver((of) => Repo)
 export class RepositoryResolver {
@@ -49,13 +47,20 @@ export class RepositoryResolver {
 		@Arg("repository_name", { nullable: false }) repository_name: string,
 		@Ctx() { payload }: IContext
 	): Promise<Repo> {
-		if (!payload) throw new Error("user not logged in")
+		if (!payload) throw new Error("user not logged in");
 		const repo = await Repo.create({
 			repository_name,
 			created_by_id: payload.userId,
 		}).save();
+		const user = await User.findOneOrFail(payload.userId);
 
 		// TODO Add repository in SSH
+		await Ssh({
+			command: "repository",
+			argument: "create",
+			username: user.username,
+			repository: repository_name,
+		});
 		return repo;
 	}
 }

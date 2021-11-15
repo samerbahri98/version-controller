@@ -29,7 +29,7 @@ user)
         mkhomedir_helper $username
         ;;
     *)
-        echo "Invalid option"
+        echo "Invalid argument"
         ;;
     esac
     ;;
@@ -39,12 +39,12 @@ repository)
         git init --bare /var/git/$username/$repository.git
         ;;
     *)
-        echo "Invalid option"
+        echo "Invalid argument"
         ;;
     esac
     ;;
 *)
-    echo "Invalid option"
+    echo "Invalid command"
     ;;
 esac
 
