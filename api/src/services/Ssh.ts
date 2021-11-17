@@ -10,6 +10,6 @@ export async function Ssh(sshParams: ISshParams) {
 	if (sshParams.repository) params.push("-r " + sshParams.repository);
 	const command = `${cli} ${params.join(" ")}`;
 	return await sshClient.then(() =>
-		sshNode.execCommand(command).then((result) => console.log(result.stdout))
+		sshNode.execCommand(command).then((result) => console.log({ result }))
 	);
 }

@@ -27,6 +27,7 @@ user)
     create)
         useradd -p $(openssl passwd -1 $password) -d /var/git/$username -g git $username
         mkhomedir_helper $username
+
         ;;
     *)
         echo "Invalid argument"

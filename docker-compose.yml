@@ -1,6 +1,6 @@
-version: '3.3'
+version: "3.3"
 
-services: 
+services:
   # git
   git:
     build: ./DockerImages/git/
@@ -9,11 +9,11 @@ services:
     hostname: git-ssh-server
     restart: unless-stopped
     ports:
-      - 80:80
-      - 22:22
+      - "80:80"
+      - "22:22"
     networks:
       - app-network
-    volumes: 
+    volumes:
       - ./git/vol/:/var/git
   queue:
     image: "redis:alpine"
@@ -27,7 +27,7 @@ services:
   worker-queue:
     build: ./DockerImages/node/
     image: node
-    env_file: 
+    env_file:
       - .env
     restart: always
     container_name: worker-queue
@@ -46,11 +46,11 @@ services:
     depends_on:
       - queue
     ports:
-      - '3000:3000'
+      - "3000:3000"
     command: sh -c 'npm install && npm run compile && npm run start'
   db:
     image: postgres
-    env_file: 
+    env_file:
       - .env
     container_name: db
     restart: always
@@ -99,13 +99,14 @@ services:
       - 8081:8081
   api:
     build: ./DockerImages/node/
-    env_file: 
+    env_file:
       - .env
     image: node
     restart: always
     container_name: api
     volumes:
       - ./api:/var/www/app
+      - ./git/vol/:/var/git
     networks:
       - app-network
     environment:
@@ -117,10 +118,8 @@ services:
     depends_on:
       - queue
     ports:
-      - '1337:1337'
+      - "1337:1337"
     command: sh -c 'npm install && npm run compile && npm run start'
-
-
 
 networks:
   app-network:

@@ -12,6 +12,7 @@ import { ObjectType, Field, ID } from "type-graphql";
 import { IRepo } from "../interfaces/IRepo";
 import { User } from "./User";
 import { TypeormLoader } from "type-graphql-dataloader";
+import { Tag } from "./Tag";
 
 @ObjectType()
 @Entity({ name: "repositories" })
@@ -33,10 +34,15 @@ export class Repo extends BaseEntity implements IRepo {
 	@TypeormLoader()
 	created_by!: User;
 	@RelationId((repo: Repo) => repo.created_by)
-	@Column({ name: "created_by"})
+	@Column({ name: "created_by" })
 	created_by_id!: string;
 
 	@Field()
 	@Column()
 	created_at!: Date;
+
+	// @Field()
+	// files!: File[];
+	@Field(()=>[Tag])
+	tags?: Tag[];
 }

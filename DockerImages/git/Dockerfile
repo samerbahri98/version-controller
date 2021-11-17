@@ -21,7 +21,7 @@ COPY ./run.sh /var/actions/run.sh
 
 RUN addgroup git
 
-RUN useradd -p $(openssl passwd -1 1234) -g git git
+RUN useradd -p $(openssl passwd -1 1234) -d /var/git -g git git
 
 RUN mkhomedir_helper git
 
@@ -33,15 +33,11 @@ RUN usermod -aG sudo git
 
 RUN chmod -R 700 /var/actions
 
-RUN echo "git ALL = NOPASSWD: /bin/systemctl restart httpd.service, /var/actions/run.sh" >>  /etc/sudoers 
+RUN echo "git ALL = NOPASSWD: /etc/init.d/apache2 restart, /var/actions/run.sh" >>  /etc/sudoers 
+
+# RUN echo "git ALL = NOPASSWD: /bin/systemctl restart httpd.service, /etc/init.d/apache2" >>  /etc/sudoers 
 
 RUN apt-get update && apt-get install -y openssh-server
-
-RUN mkdir /var/git/home.git
-
-RUN git init /var/git/home.git --bare
-
-RUN git clone https://github.com/samerbahri98/dodecahedron.git /var/git/dodecahedron.git --bare
 
 RUN apt-get update && apt-get install -y apache2
 
@@ -51,11 +47,15 @@ RUN rm /etc/apache2/apache2.conf
 
 COPY ./apache2.conf /etc/apache2/
 
+RUN rm /etc/apache2/envvars
+
+COPY ./envvars /etc/apache2/envvars
+
 RUN a2enmod cgi alias env
 
-RUN chgrp -R www-data /var/git
+RUN chgrp -R git /var/git
 
-RUN htpasswd -b -c /var/git/.htpasswd git git
+RUN htpasswd -c /var/git/.htpasswd git
 
 RUN service apache2 restart
 
