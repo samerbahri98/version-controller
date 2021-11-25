@@ -1,4 +1,4 @@
-import { User } from "./User";
+import { User } from "../entities/User";
 import { sign } from "jsonwebtoken";
 import { IAuth } from "../interfaces/IAuth";
 import { Field, ObjectType } from "type-graphql";

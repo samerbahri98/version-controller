@@ -10,12 +10,12 @@ import helmet from "helmet";
 import { buildSchema } from "type-graphql";
 import { db } from "./config/db";
 import { RegisterResolver } from "./graphql/User/Register";
-import { redisClient } from "./config/redis";
 import { UserResolver } from "./graphql/User/User";
 import { RepositoryResolver } from "./graphql/Repository/RepositoryResolver";
 import { ApolloServerLoaderPlugin } from "type-graphql-dataloader";
 import { getConnection } from "typeorm";
 import { context } from "./middlewares/Context";
+import { SshInit } from "./config/ssh";
 
 const morgan = require("morgan");
 
@@ -24,7 +24,7 @@ const morgan = require("morgan");
 
 	// MIDDLEWARES
 	await db;
-	await redisClient;
+	await SshInit
 	app.use(cors());
 	app.use(
 		helmet({

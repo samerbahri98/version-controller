@@ -110,20 +110,20 @@ services:
       - db
     depends_on:
       - db
-  redis-commander:
-    image: rediscommander/redis-commander
-    container_name: redis-commander
-    networks:
-      - app-network
-    restart: always
-    links:
-      - queue
-    depends_on:
-      - queue
-    environment:
-      - REDIS_HOSTS=queue:6379
-    ports:
-      - 8081:8081
+  # redis-commander:
+  #  image: rediscommander/redis-commander
+  #  container_name: redis-commander
+  #  networks:
+  #     - app-network
+  #  restart: always
+  #  links:
+  #    - queue
+  #  depends_on:
+  #    - queue
+  #  environment:
+  #    - REDIS_HOSTS=queue:6379
+  #  ports:
+  #    - 8081:8081
   api:
     build: ./DockerImages/node/
     env_file:

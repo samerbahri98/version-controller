@@ -13,6 +13,8 @@ import { IRepo } from "../interfaces/IRepo";
 import { User } from "./User";
 import { TypeormLoader } from "type-graphql-dataloader";
 import { Tag } from "./Tag";
+import { IDownloadable } from "../interfaces/IDownloadable";
+import { Downloadable } from "../models/Downloadable";
 
 @ObjectType()
 @Entity({ name: "repositories" })
@@ -41,8 +43,11 @@ export class Repo extends BaseEntity implements IRepo {
 	@Column()
 	created_at!: Date;
 
+	@Field()
+	download!: Downloadable
+
 	// @Field()
 	// files!: File[];
-	@Field(()=>[Tag])
-	tags?: Tag[];
+	// @Field(()=>[Tag])
+	// tags?: Tag[];
 }

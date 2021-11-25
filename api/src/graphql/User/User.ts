@@ -7,7 +7,6 @@ import {
 	Root,
 	UseMiddleware,
 } from "type-graphql";
-import { Auth } from "../../entities/Auth";
 import { User } from "../../entities/User";
 import { IContext } from "../../interfaces/IContext";
 import { IsAuth } from "../../middlewares/IsAuth";

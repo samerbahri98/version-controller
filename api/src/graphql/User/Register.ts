@@ -12,11 +12,8 @@ import {
 	UseMiddleware,
 } from "type-graphql";
 import { User } from "../../entities/User";
-import { Auth } from "../../entities/Auth";
+import { Auth } from "../../models/Auth";
 import * as bcrypt from "bcryptjs";
-import { IUser } from "../../interfaces/IUser";
-import { QueueNode } from "../../services/QueueNode";
-import { status } from "../../interfaces/IQueueNode";
 import {
 	IsEmail,
 	Length,

@@ -23,19 +23,35 @@ RUN addgroup git
 
 RUN useradd -p $(openssl passwd -1 1234) -d /var/git -g git git
 
+RUN useradd -p $(openssl passwd -1 1234) -d /home -g git node
+
 RUN mkhomedir_helper git
 
 RUN chown git:git /var/git
 
-RUN chown -R git:git /var/actions
+RUN chown -R node /home
 
-RUN usermod -aG sudo git
+USER node
+
+RUN mkdir /home/.ssh
+
+RUN touch /home/.ssh/authorized_keys
+
+USER git
+
+RUN mkdir /var/git/.ssh
+
+RUN touch /var/git/.ssh/authorized_keys
+
+USER root
+
+RUN chown -R node /var/actions
+
+RUN usermod -aG sudo node
 
 RUN chmod -R 700 /var/actions
 
-RUN echo "git ALL = NOPASSWD: /etc/init.d/apache2 restart, /var/actions/run.sh" >>  /etc/sudoers 
-
-# RUN echo "git ALL = NOPASSWD: /bin/systemctl restart httpd.service, /etc/init.d/apache2" >>  /etc/sudoers 
+RUN echo "node ALL = NOPASSWD: /etc/init.d/apache2 restart, /var/actions/run.sh" >>  /etc/sudoers 
 
 RUN apt-get update && apt-get install -y openssh-server
 
@@ -55,7 +71,11 @@ RUN a2enmod cgi alias env
 
 RUN chgrp -R git /var/git
 
-RUN htpasswd -c /var/git/.htpasswd git
+RUN echo "/usr/bin/git-shell" >> /etc/shells
+
+RUN sudo chsh git -s $(which git-shell)
+
+RUN htpasswd -b -c /var/git/.htpasswd git 1234
 
 RUN service apache2 restart
 
