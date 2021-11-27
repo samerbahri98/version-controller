@@ -9,11 +9,9 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 ENV TZ=Europe/Budapest
 
-RUN apt-get update && apt-get install -y tzdata sudo
+RUN apt-get update && apt-get install -y tzdata sudo git openssh-server apache2 apache2-utils
 
 RUN mkdir /var/git
-
-RUN apt-get update && apt-get install -y git
 
 RUN mkdir /var/actions
 
@@ -25,9 +23,11 @@ RUN useradd -p $(openssl passwd -1 1234) -d /var/git -g git git
 
 RUN useradd -p $(openssl passwd -1 1234) -d /home -g git node
 
-RUN mkhomedir_helper git
+RUN chown -R git /var/git
 
-RUN chown git:git /var/git
+RUN chgrp -R git /var/git
+
+RUN mkhomedir_helper git
 
 RUN chown -R node /home
 
@@ -36,12 +36,6 @@ USER node
 RUN mkdir /home/.ssh
 
 RUN touch /home/.ssh/authorized_keys
-
-USER git
-
-RUN mkdir /var/git/.ssh
-
-RUN touch /var/git/.ssh/authorized_keys
 
 USER root
 
@@ -52,12 +46,6 @@ RUN usermod -aG sudo node
 RUN chmod -R 700 /var/actions
 
 RUN echo "node ALL = NOPASSWD: /etc/init.d/apache2 restart, /var/actions/run.sh" >>  /etc/sudoers 
-
-RUN apt-get update && apt-get install -y openssh-server
-
-RUN apt-get update && apt-get install -y apache2
-
-RUN apt-get update && apt-get install -y apache2-utils
 
 RUN rm /etc/apache2/apache2.conf
 
@@ -73,9 +61,7 @@ RUN chgrp -R git /var/git
 
 RUN echo "/usr/bin/git-shell" >> /etc/shells
 
-RUN sudo chsh git -s $(which git-shell)
-
-RUN htpasswd -b -c /var/git/.htpasswd git 1234
+RUN chsh git -s '/usr/bin/git-shell'
 
 RUN service apache2 restart
 

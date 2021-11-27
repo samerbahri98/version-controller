@@ -82,7 +82,7 @@ class RegisterArgs {
 }
 
 @Resolver((of) => Auth)
-export class RegisterResolver implements ResolverInterface<Auth> {
+export class AuthResolver implements ResolverInterface<Auth> {
 	@FieldResolver()
 	async accessToken(@Root() parent: Auth) {
 		return Auth.createAccessToken(parent.user);

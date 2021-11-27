@@ -1,3 +1,4 @@
+import { PublicKey } from "../entities/PublicKey";
 import { Repo } from "../entities/Repo";
 
 export interface IUser {
@@ -11,4 +12,5 @@ export interface IUser {
 	attribution_tag: string;
 	phone: string;
 	repositories?: Repo[];
+	public_keys?: PublicKey[];
 }

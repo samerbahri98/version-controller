@@ -82,5 +82,19 @@ BEGIN;
         CONSTRAINT unique_repo_per_user UNIQUE(repository_name,created_by),
         PRIMARY KEY (repository_id)
     );
+
+    CREATE TABLE public_keys(
+        public_key_id uuid DEFAULT uuid_generate_v4 (),
+        public_key_hash TEXT NOT NULL,
+        public_key_encryption_type Text NOT NULL,
+        created_by uuid NOT NULL,
+        created_at TIMESTAMP DEFAULT current_timestamp,
+        CONSTRAINT created_by_id FOREIGN KEY(created_by) REFERENCES user_data(user_id),
+        CONSTRAINT unique_key_per_user UNIQUE(public_key_hash,public_key_encryption_type,created_by),
+
+        PRIMARY KEY (public_key_id)
+    );
+
+
 END TRANSACTION;
 COMMIT;

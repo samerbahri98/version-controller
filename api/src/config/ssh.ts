@@ -39,27 +39,27 @@ export const SshInit = (() => {
 						// Add authorized_keys
 
 						const commandSequence = [
-							`echo '${parsedPublicKey}' >> /home/.ssh/authorized_keys`, // enable editing the sshd_config
 							`echo '${process.env.GIT_CONTAINER_PASSWORD}' | sudo -S chmod 777 /etc/ssh/sshd_config`, // enable editing the sshd_config
-							`echo '${process.env.GIT_CONTAINER_PASSWORD}' | echo 'PasswordAuthentication no\nUsePam no\nPermitRootLogin no\nPermitRootLogin prohibit-password' >> /etc/ssh/sshd_config`, //disable password auth
+							`echo '${process.env.GIT_CONTAINER_PASSWORD}' | sudo -S echo 'PasswordAuthentication no\nUsePam no\nPermitRootLogin no\nPermitRootLogin prohibit-password' >> /etc/ssh/sshd_config`, //disable password auth
 							`echo '${process.env.GIT_CONTAINER_PASSWORD}' | sudo -S chmod 644 /etc/ssh/sshd_config`, // disable editing the sshd_config
-							`touch /var/git/.htpasswd && mkdir /var/git/.ssh && touch /var/git/.ssh/authorized_keys)`,
-							`echo '${process.env.GIT_CONTAINER_PASSWORD}' | sudo -S chgrp -R git /var/git/.ssh && chown -R git /var/git/.ssh`,
-							`echo '${process.env.GIT_CONTAINER_PASSWORD}' | sudo -S service apache2 restart`, //restart http
+							`echo '${process.env.GIT_CONTAINER_PASSWORD}' | sudo -S htpasswd -b -c '/var/git/.htpasswd' 'git' '${process.env.GIT_CONTAINER_PASSWORD}'`,
+							`echo '${process.env.GIT_CONTAINER_PASSWORD}' | sudo -S mkdir '/var/git/.ssh'`,
+							`echo '${process.env.GIT_CONTAINER_PASSWORD}' | sudo -S touch '/var/git/.hushlogin'`,
+							`echo '${process.env.GIT_CONTAINER_PASSWORD}' | sudo -S touch '/var/git/.ssh/authorized_keys'`,
+							`echo '${process.env.GIT_CONTAINER_PASSWORD}' | sudo -S chgrp -R 'git' '/var/git/.ssh'`,
+							`echo '${process.env.GIT_CONTAINER_PASSWORD}' | sudo -S chown -R 'git' '/var/git/.ssh'`,
+							`echo '${parsedPublicKey}' >> /home/.ssh/authorized_keys`, // enable editing the sshd_config
+							`echo '${process.env.GIT_CONTAINER_PASSWORD}' | sudo -S /etc/init.d/apache2 restart`, //restart http
 							`echo '${process.env.GIT_CONTAINER_PASSWORD}' | sudo -S /etc/init.d/ssh reload`, //restart ssh
 						];
 
-						commandSequence.forEach(async (command, index) => {
-							await sshAuthNode
-								.execCommand(command)
-								.then((result) => {
-									console.log(result);
-									if (index === commandSequence.length - 1)
-										sshAuthNode.dispose();
-								})
-								.catch(reject);
-						});
-
+						for (const command of commandSequence) {
+							try {
+								await sshAuthNode.execCommand(command);
+							} catch (err) {
+								throw err;
+							}
+						}
 						sshAuthNode.dispose();
 
 						await fs.writeFileSync(

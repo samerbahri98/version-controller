@@ -1,18 +1,24 @@
 import { AuthenticationError } from "apollo-server-errors";
+import { PrivateKey } from "sshpk";
+
 import {
+	Arg,
 	Ctx,
 	FieldResolver,
+	Mutation,
 	Query,
 	Resolver,
+	ResolverInterface,
 	Root,
 	UseMiddleware,
 } from "type-graphql";
+import { PublicKey } from "../../entities/PublicKey";
 import { User } from "../../entities/User";
 import { IContext } from "../../interfaces/IContext";
 import { IsAuth } from "../../middlewares/IsAuth";
 
-@Resolver(User)
-export class UserResolver {
+@Resolver((of) => User)
+export class UserResolver implements ResolverInterface<User> {
 	@FieldResolver()
 	async attribution_tag(@Root() parent: User) {
 		return `${parent.username}<${parent.email}>`;

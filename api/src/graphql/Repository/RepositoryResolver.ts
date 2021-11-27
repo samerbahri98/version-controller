@@ -17,13 +17,10 @@ import { IsAuth } from "../../middlewares/IsAuth";
 import { IContext } from "../../interfaces/IContext";
 import { Ssh } from "../../services/Ssh";
 import { Downloadable } from "../../models/Downloadable";
+import { AuthenticationError } from "apollo-server-errors";
 
 @Resolver((of) => Repo)
-export class RepositoryResolver {
-	// constructor(
-	// 	@InjectRepository(Repo) private readonly repoRepository: Repository<Repo>,
-	// 	@InjectRepository(User) private readonly userRepository: Repository<User>
-	// ) {}
+export class RepositoryResolver implements ResolverInterface<Repo> {
 	@FieldResolver((of) => User)
 	async created_by(@Root() parent: Repo) {
 		const users = await User.find({
@@ -34,11 +31,17 @@ export class RepositoryResolver {
 		return users[0];
 	}
 
-	@FieldResolver()
+	@FieldResolver((of) => Downloadable)
 	async download(@Root() parent: Repo) {
+		const users = await User.find({
+			cache: 1000,
+			where: { user_id: parent.created_by_id },
+		});
+
+		const user = users[0];
 		const downloadable = new Downloadable(
 			parent.repository_name,
-			parent.created_by.username
+			user.username
 		);
 		return downloadable;
 	}
@@ -75,7 +78,8 @@ export class RepositoryResolver {
 		@Arg("repository_name", { nullable: false }) repository_name: string,
 		@Ctx() { payload }: IContext
 	): Promise<Repo> {
-		if (!payload) throw new Error("user not logged in");
+		if (!payload) throw new AuthenticationError("not authenticated");
+
 		const repo = await Repo.create({
 			repository_name,
 			created_by_id: payload.userId,

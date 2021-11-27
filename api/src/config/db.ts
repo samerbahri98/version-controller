@@ -1,4 +1,5 @@
 import { createConnection, Connection } from "typeorm";
+import { PublicKey } from "../entities/PublicKey";
 import { Repo } from "../entities/Repo";
 import { User } from "../entities/User";
 
@@ -9,5 +10,5 @@ export const db = createConnection({
 	username: process.env.PG_USER,
 	password: process.env.PG_PASSWORD,
 	database: process.env.PG_DB,
-	entities: [User, Repo],
+	entities: [User, Repo,PublicKey],
 });

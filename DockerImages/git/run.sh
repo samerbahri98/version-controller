@@ -26,14 +26,16 @@ user)
     case $argument in
     create)
         mkdir /var/git/$username
+        chgrp -R git /var/git/$username
+        chown -R git /var/git/$username
+        chmod 777 /var/git/$username
         htpasswd -b /var/git/.htpasswd $username $password
-
         /etc/init.d/apache2 restart
         ;;
-    setprivatekey)
-        echo $password >> /var/git/.ssh/authorized_keys
+    setpublickey)
+        echo $password>> /var/git/.ssh/authorized_keys
         ;;
-    revokeprivatekey)
+    revokepublickey)
         sed -i "$(grep -n $password /var/git/.ssh/authorized_keys  | head -n 1 | cut -d: -f1)d" /var/git/.ssh/authorized_keys
         ;;
     *)
@@ -46,7 +48,7 @@ repository)
     create)
         git init --bare /var/git/$username/$repository.git
         chgrp -R git /var/git/$username/$repository.git
-        chown -R $git /var/git/$username/$repository.git
+        chown -R git /var/git/$username/$repository.git
         chmod -R 777 /var/git/$username/$repository.git
 
         ;;

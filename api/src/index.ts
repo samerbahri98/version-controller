@@ -9,13 +9,14 @@ import cors from "cors";
 import helmet from "helmet";
 import { buildSchema } from "type-graphql";
 import { db } from "./config/db";
-import { RegisterResolver } from "./graphql/User/Register";
-import { UserResolver } from "./graphql/User/User";
+import { AuthResolver } from "./graphql/User/AuthResolver";
+import { UserResolver } from "./graphql/User/UserResolver";
 import { RepositoryResolver } from "./graphql/Repository/RepositoryResolver";
 import { ApolloServerLoaderPlugin } from "type-graphql-dataloader";
 import { getConnection } from "typeorm";
 import { context } from "./middlewares/Context";
 import { SshInit } from "./config/ssh";
+import { PublicKeyResolver } from "./graphql/PublicKey/PublicKeyResolver";
 
 const morgan = require("morgan");
 
@@ -24,7 +25,7 @@ const morgan = require("morgan");
 
 	// MIDDLEWARES
 	await db;
-	await SshInit
+	await SshInit;
 	app.use(cors());
 	app.use(
 		helmet({
@@ -37,7 +38,12 @@ const morgan = require("morgan");
 
 	// GRAPHQL
 	const schema = await buildSchema({
-		resolvers: [RegisterResolver, UserResolver, RepositoryResolver],
+		resolvers: [
+			AuthResolver,
+			UserResolver,
+			RepositoryResolver,
+			PublicKeyResolver,
+		],
 	});
 	const apolloServer = new ApolloServer({
 		schema,

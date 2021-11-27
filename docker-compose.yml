@@ -15,15 +15,15 @@ services:
       - app-network
     volumes:
       - ./git/vol/:/var/git
-  queue:
-    image: "redis:alpine"
-    container_name: queue
-    volumes:
-      - ./data/queue:/data
-    networks:
-      - app-network
-    ports:
-      - 6379:6379
+  # queue:
+  #   image: "redis:alpine"
+  #   container_name: queue
+  #   volumes:
+  #     - ./data/queue:/data
+  #   networks:
+  #     - app-network
+  #   ports:
+  #     - 6379:6379
   # worker-queue:
   #   build: ./DockerImages/node/
   #   image: node
@@ -50,8 +50,8 @@ services:
   #   command: sh -c 'npm install && npm run compile && npm run start'
 
   client:
-    build: ./DockerImages/node/
-    image: node
+    build: ./DockerImages/react/
+    image: react
     env_file:
       - .env
     restart: always
@@ -72,7 +72,7 @@ services:
       - queue
     ports:
       - "3000:3000"
-    command: sh -c 'npm install && npm run start'
+    command: sh -c 'npm install && npm start'
 
     
   db:
