@@ -87,4 +87,4 @@ export const sshCredentials = {
 	privateKey: path.join(__dirname, "id_rsa"),
 };
 
-export const cli = "sudo /var/actions/run.sh";
+export const cli = `echo '${process.env.GIT_CONTAINER_PASSWORD}' | sudo -S /var/actions/run.sh`;

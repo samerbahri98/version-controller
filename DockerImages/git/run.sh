@@ -33,10 +33,10 @@ user)
         /etc/init.d/apache2 restart
         ;;
     setpublickey)
-        echo $password>> /var/git/.ssh/authorized_keys
+        ./manipulate_keys set $password
         ;;
     revokepublickey)
-        sed -i "$(grep -n $password /var/git/.ssh/authorized_keys  | head -n 1 | cut -d: -f1)d" /var/git/.ssh/authorized_keys
+        ./manipulate_keys revoke $password
         ;;
     *)
         echo "Invalid argument"
@@ -51,6 +51,9 @@ repository)
         chown -R git /var/git/$username/$repository.git
         chmod -R 777 /var/git/$username/$repository.git
 
+        ;;
+    list_commits)
+        echo git log /var/git/$username/$repository.git --pretty=format:"%H - %h - %T - %t - %P - %p - %s - %cd"
         ;;
     *)
         echo "Invalid argument"

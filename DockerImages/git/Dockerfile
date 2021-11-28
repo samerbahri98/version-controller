@@ -17,6 +17,8 @@ RUN mkdir /var/actions
 
 COPY ./run.sh /var/actions/run.sh
 
+COPY ./manipulate_keys /var/actions/manipulate_keys
+
 RUN addgroup git
 
 RUN useradd -p $(openssl passwd -1 1234) -d /var/git -g git git
@@ -45,7 +47,7 @@ RUN usermod -aG sudo node
 
 RUN chmod -R 700 /var/actions
 
-RUN echo "node ALL = NOPASSWD: /etc/init.d/apache2 restart, /var/actions/run.sh" >>  /etc/sudoers 
+RUN echo "node ALL = NOPASSWD: /etc/init.d/apache2 restart, /var/actions/run.sh /var/actions/manipulate_keys" >>  /etc/sudoers 
 
 RUN rm /etc/apache2/apache2.conf
 

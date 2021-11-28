@@ -13,8 +13,8 @@ services:
       - "22:22"
     networks:
       - app-network
-    volumes:
-      - ./git/vol/:/var/git
+    # volumes:
+    #   - ./git/vol/:/var/git
   # queue:
   #   image: "redis:alpine"
   #   container_name: queue
@@ -66,10 +66,10 @@ services:
       # - REDIS_PORT=6379
       # - GIT_CONTAINER=git
       - PORT=3000
-    links:
-      - queue
-    depends_on:
-      - queue
+    # links:
+    #   - queue
+    # depends_on:
+    #   - queue
     ports:
       - "3000:3000"
     command: sh -c 'npm install && npm start'
@@ -140,10 +140,10 @@ services:
       - PORT=1337
       - ACCESS_TOKEN_SECRET="ACCESS_TOKEN_SECRET"
       - REFRESH_TOKEN_SECRET="REFRESH_TOKEN_SECRET"
-    links:
-      - queue
-    depends_on:
-      - queue
+    # links:
+    #   - queue
+    # depends_on:
+    #   - queue
     ports:
       - "1337:1337"
     command: sh -c 'npm install && npm run compile && npm run start'

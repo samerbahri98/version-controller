@@ -1,10 +1,10 @@
 import { cli, sshCredentials } from "../config/ssh";
-import { NodeSSH } from "node-ssh";
+import { NodeSSH, SSHExecCommandResponse } from "node-ssh";
 
 import { ISshParams } from "../interfaces/ISshParams";
 
 export async function Ssh(sshParams: ISshParams) {
-	return new Promise((resolve, reject) => {
+	return new Promise<SSHExecCommandResponse>((resolve, reject) => {
 		const params: Array<string> = [];
 		if (sshParams.argument) params.push("-a " + sshParams.argument);
 		if (sshParams.command) params.push("-c " + sshParams.command);
@@ -17,7 +17,7 @@ export async function Ssh(sshParams: ISshParams) {
 		const sshClient = sshNode.connect(sshCredentials);
 
 		sshClient.then(() =>
-			sshNode.execCommand(command).then(console.log).then(resolve).catch(reject)
+			sshNode.execCommand(command).then(resolve).catch(reject)
 		);
 	});
 }

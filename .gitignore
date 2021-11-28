@@ -1,3 +1,4 @@
+.vscode
 demo
 queue/data
 worker-queue/node_modules
