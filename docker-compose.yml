@@ -13,8 +13,8 @@ services:
       - "22:22"
     networks:
       - app-network
-    # volumes:
-    #   - ./git/vol/:/var/git
+    volumes:
+      - ./git/vol/:/var/git
   # queue:
   #   image: "redis:alpine"
   #   container_name: queue
