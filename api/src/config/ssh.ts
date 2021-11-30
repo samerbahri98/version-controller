@@ -63,18 +63,19 @@ export const SshInit = (() => {
 							...passwords.map(
 								(password) => `echo '${password}' >> /var/git/.htpasswd  `
 							),
-							`echo '${process.env.GIT_CONTAINER_PASSWORD}' | sudo -S mkdir '/var/git/.ssh'`,
 							`echo '${process.env.GIT_CONTAINER_PASSWORD}' | sudo -S touch '/var/git/.hushlogin'`,
+							`echo '${process.env.GIT_CONTAINER_PASSWORD}' | sudo -S mkdir '/var/git/.ssh'`,
 							`echo '${process.env.GIT_CONTAINER_PASSWORD}' | sudo -S touch '/var/git/.ssh/authorized_keys'`,
 							`echo '${process.env.GIT_CONTAINER_PASSWORD}' | sudo -S chgrp -R 'git' '/var/git/.ssh'`,
 							`echo '${process.env.GIT_CONTAINER_PASSWORD}' | sudo -S chown -R 'git' '/var/git/.ssh'`,
-							`echo '${process.env.GIT_CONTAINER_PASSWORD}' | sudo -S chmod 777 -R '/var/git/.ssh'`,
 							`echo '${parsedPublicKey}' >> /home/.ssh/authorized_keys`, // enable editing the sshd_config
 							`echo '${process.env.GIT_CONTAINER_PASSWORD}' | sudo -S /etc/init.d/apache2 restart`, //restart http
 
 							...publicKeys.map(
 								(key) => `echo '${key}' >> /var/git/.ssh/authorized_keys  `
 							),
+							`echo '${process.env.GIT_CONTAINER_PASSWORD}' | sudo -S chmod 700 '/var/git/.ssh'`,
+							`echo '${process.env.GIT_CONTAINER_PASSWORD}' | sudo -S chmod 600 '/var/git/.ssh/authorized_keys'`,
 							`echo '${process.env.GIT_CONTAINER_PASSWORD}' | sudo -S /etc/init.d/ssh reload`, //restart ssh
 						];
 

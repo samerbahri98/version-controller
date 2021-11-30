@@ -34,10 +34,10 @@ user)
         /etc/init.d/apache2 restart
         ;;
     setpublickey)
-        ./manipulate_keys set $password
+        /var/actions/manipulate_keys set $password
         ;;
     revokepublickey)
-        ./manipulate_keys revoke $password
+        /var/actions/manipulate_keys revoke $password
         ;;
     *)
         echo "Invalid argument"
