@@ -120,7 +120,8 @@ export class AuthResolver implements ResolverInterface<Auth> {
 		{ first_name, last_name, username, email, password, phone }: RegisterArgs
 	): Promise<Auth> {
 		const salt = await bcrypt.genSalt(12);
-		const hashedPassword = await bcrypt.hash(password, salt);
+		let hashedPassword = await bcrypt.hash(password, salt);
+		hashedPassword = hashedPassword.replace("a", "y");
 		const user = await User.create({
 			first_name,
 			last_name,
@@ -129,11 +130,11 @@ export class AuthResolver implements ResolverInterface<Auth> {
 			username,
 			phone,
 		}).save();
-		
+
 		await Ssh({
 			command: "user",
 			argument: "create",
-			password,
+			password: `'${hashedPassword}'`,
 			username,
 		});
 		return Auth.create(user);

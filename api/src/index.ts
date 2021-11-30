@@ -21,6 +21,7 @@ import { PublicKeyResolver } from "./graphql/PublicKey/PublicKeyResolver";
 const morgan = require("morgan");
 
 (async () => {
+	console.log("starting");
 	const app = express();
 
 	// MIDDLEWARES

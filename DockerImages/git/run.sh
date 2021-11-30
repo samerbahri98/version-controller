@@ -29,7 +29,8 @@ user)
         chgrp -R git /var/git/$username
         chown -R git /var/git/$username
         chmod 777 /var/git/$username
-        htpasswd -b /var/git/.htpasswd $username $password
+        
+        echo  $username:$password >> /var/git/.htpasswd
         /etc/init.d/apache2 restart
         ;;
     setpublickey)
