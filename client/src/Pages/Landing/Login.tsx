@@ -1,5 +1,5 @@
 import { Form, Formik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FieldForm from "../../Components/Form/FieldForm";
 
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
@@ -8,44 +8,52 @@ import { useQuery, gql, ApolloConsumer } from "@apollo/client";
 import { IAuth } from "../../Interfaces/IAuth";
 
 const LOGIN_QUERY = gql`
-  query {
+  query loginQuery($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       accessToken
       refreshToken
+      user {
+        first_name
+        attribution_tag
+      }
     }
   }
 `;
 
+interface ILoginPayload {
+  login: IAuth;
+}
+
 function Login(props: {
   toggle: React.MouseEventHandler<HTMLButtonElement> | undefined;
 }) {
-  // const useLogin: ((values: ILoginFields) => void | Promise<any>) &
-  //   ((values: ILoginFields, formikHelpers: any) => void | Promise<any>) = (
-  //   values: ILoginFields
-  // ) => {
-
-  //   console.log({ loading, error, data });
-  // };
-
-  const { loading, error, data, refetch } = useQuery<IAuth, ILoginFields>(
-    LOGIN_QUERY
-    // ,
-    // {
-    //   variables: {
-    //     email: emailState,
-    //     password: passwordState,
-    //   },
-    // }
+  const { data, loading, error, refetch } = useQuery<ILoginPayload, ILoginFields>(
+    LOGIN_QUERY,
+    {
+      fetchPolicy: "no-cache",
+      errorPolicy: "all",
+    }
   );
+
+  useEffect(() => {
+    if (data && data.login && data.login.accessToken) {
+      localStorage.setItem("accessToken", data.login.accessToken);
+      window.location.reload();
+    }
+  });
+
   return (
     <ApolloConsumer>
       {(client) => (
         <Formik
-          initialValues={{ email: "", password: "" }}
+          initialValues={{
+            email: "samer.bahri@ieee.org",
+            password: "Samer123!",
+          }}
           // children={undefined}
-          onSubmit={(values) =>
-            refetch(values).then((auth) => console.log(auth.data.accessToken))
-          }
+          onSubmit={async (values) => {
+            await refetch(values);
+          }}
         >
           {({ values }) => (
             <Form>
@@ -76,6 +84,7 @@ function Login(props: {
               <div className="field">
                 <button
                   className="button is-primary"
+                  type="submit"
                   // onClick={handleSubmit}
                 >
                   Login

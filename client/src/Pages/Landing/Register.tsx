@@ -1,32 +1,71 @@
 import { Form, Formik } from "formik";
-import React from "react";
+import React, { useEffect } from "react";
 import FieldForm from "../../Components/Form/FieldForm";
 
-import {
-  faCodeBranch,
-  faEnvelope,
-  faLock,
-} from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import IRegisterFields from "../../Interfaces/Landing/IRegisterFields";
+import { gql, useMutation } from "@apollo/client";
+import { IAuth } from "../../Interfaces/IAuth";
 
-const submitLogin: ((values: IRegisterFields) => void | Promise<any>) &
-  ((values: any, formikHelpers: any) => void | Promise<any>) = () => {};
+const REGISTER_MUTATION = gql`
+  mutation registerMutation(
+    $first_name: String!
+    $last_name: String!
+    $username: String!
+    $email: String!
+    $password: String!
+    $phone: String!
+  ) {
+    register(
+      first_name: $first_name
+      last_name: $last_name
+      username: $username
+      email: $email
+      password: $password
+      phone: $phone
+    ) {
+      accessToken
+      refreshToken
+      user {
+        first_name
+        attribution_tag
+      }
+    }
+  }
+`;
+
+interface IRegisterPayload {
+  register: IAuth;
+}
 
 function Register(props: {
   toggle: React.MouseEventHandler<HTMLButtonElement> | undefined;
 }) {
+  const [submitRegister, {data}] = useMutation<
+    IRegisterPayload,
+    IRegisterFields
+  >(REGISTER_MUTATION, {
+    fetchPolicy: "no-cache",
+    errorPolicy: "all",
+  });
+
+  useEffect(() => {
+    if (data && data.register && data.register.accessToken) {
+      localStorage.setItem("accessToken", data.register.accessToken);
+      window.location.reload();
+    }
+  });
   return (
     <Formik
       initialValues={{
-        first_name: "",
-        last_name: "",
-        username: "",
-        email: "",
-        password: "",
-        phone: "",
+        first_name: "amani",
+        last_name: "brik",
+        username: "amanibrik5",
+        email: "amanibrik5@gmail.com",
+        password: "Amani123!!!",
+        phone: "123456789",
       }}
-      // children={undefined}
-      onSubmit={submitLogin}
+      onSubmit={async (values) => submitRegister({ variables: values })}
     >
       {({ values }) => (
         <Form>

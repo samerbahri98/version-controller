@@ -13,7 +13,7 @@ function App() {
     <Provider store={store}>
       <Router>
         <Routes>
-          {window.sessionStorage.getItem("accessToken") === null ? (
+          {localStorage.getItem("accessToken") === null ? (
             <Route path="/" element={<Landing />} />
           ) : (
             <Route

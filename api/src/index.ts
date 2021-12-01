@@ -2,8 +2,8 @@
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import {
-	ApolloServerPluginLandingPageGraphQLPlayground,
-	ApolloServerPluginLandingPageDisabled,
+  ApolloServerPluginLandingPageGraphQLPlayground,
+  ApolloServerPluginLandingPageDisabled,
 } from "apollo-server-core";
 import cors from "cors";
 import helmet from "helmet";
@@ -21,50 +21,51 @@ import { PublicKeyResolver } from "./graphql/PublicKey/PublicKeyResolver";
 const morgan = require("morgan");
 
 (async () => {
-	console.log("starting");
-	const app = express();
+  console.log("starting");
+  const app = express();
 
-	// MIDDLEWARES
-	await db;
-	await SshInit;
-	app.use(cors());
-	app.use(
-		helmet({
-			contentSecurityPolicy:
-				process.env.NODE_ENV === "production" ? undefined : false,
-		})
-	);
-	app.use(morgan("dev"));
-	app.use(express.json());
+  // MIDDLEWARES
+  await db;
+  await SshInit;
+  app.use(
+    helmet({
+      contentSecurityPolicy:
+        process.env.NODE_ENV === "production" ? undefined : false,
+    })
+  );
 
-	// GRAPHQL
-	const schema = await buildSchema({
-		resolvers: [
-			AuthResolver,
-			UserResolver,
-			RepositoryResolver,
-			PublicKeyResolver,
-		],
-	});
-	const apolloServer = new ApolloServer({
-		schema,
-		context: ({ req, res }) => ({
-			req,
-			res,
-		}),
-		plugins: [
-			ApolloServerPluginLandingPageGraphQLPlayground(),
-			ApolloServerLoaderPlugin({
-				typeormGetConnection: getConnection, // for use with TypeORM
-			}),
-		],
-	});
+  app.use(morgan("dev"));
+  app.use(express.json());
 
-	await apolloServer.start();
+  // GRAPHQL
+  const schema = await buildSchema({
+    resolvers: [
+      AuthResolver,
+      UserResolver,
+      RepositoryResolver,
+      PublicKeyResolver,
+    ],
+  });
+  const apolloServer = new ApolloServer({
+    schema,
+    context: ({ req, res }) => ({
+      req,
+      res,
+    }),
+    plugins: [
+      ApolloServerPluginLandingPageGraphQLPlayground(),
+      ApolloServerLoaderPlugin({
+        typeormGetConnection: getConnection, // for use with TypeORM
+      }),
+    ],
+    introspection: false,
+  });
 
-	apolloServer.applyMiddleware({ app });
+  await apolloServer.start();
 
-	// SERVER
-	const PORT = process.env.PORT || 3300;
-	app.listen(PORT, () => console.log("server online"));
+  apolloServer.applyMiddleware({ app });
+
+  // SERVER
+  const PORT = process.env.PORT || 3300;
+  app.listen(PORT, () => console.log("server online"));
 })();

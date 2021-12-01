@@ -69,7 +69,7 @@ services:
     links:
       - api
     depends_on:
-      - api
+      - "api"
     ports:
       - "3000:3000"
     command: sh -c 'npm install && npm start'
