@@ -27,13 +27,13 @@ interface ILoginPayload {
 function Login(props: {
   toggle: React.MouseEventHandler<HTMLButtonElement> | undefined;
 }) {
-  const { data, loading, error, refetch } = useQuery<ILoginPayload, ILoginFields>(
-    LOGIN_QUERY,
-    {
-      fetchPolicy: "no-cache",
-      errorPolicy: "all",
-    }
-  );
+  const { data, loading, error, refetch } = useQuery<
+    ILoginPayload,
+    ILoginFields
+  >(LOGIN_QUERY, {
+    fetchPolicy: "no-cache",
+    errorPolicy: "all",
+  });
 
   useEffect(() => {
     if (data && data.login && data.login.accessToken) {

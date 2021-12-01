@@ -1,55 +1,47 @@
 import { faCodeBranch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
+import React, { useState } from "react";
 
 function Navbar() {
+  const [active, setActive] = useState(false);
   return (
     <nav className="navbar" role="navigation" aria-label="main navigation">
       <div className="navbar-brand">
         <a className="navbar-item" href="/">
           <FontAwesomeIcon icon={faCodeBranch} size="2x" />
-          <p style={{fontSize:"24px"}}>&nbsp;Version Controller</p>
+          <p style={{ fontSize: "24px" }}>&nbsp;Version Controller</p>
         </a>
 
-        <a
+        <button
           role="button"
-          className="navbar-burger"
+          className={!active ? "navbar-burger" : "navbar-burger is-active"}
           aria-label="menu"
           aria-expanded="false"
           data-target="navbarBasicExample"
+          onClick={() => setActive(!active)}
         >
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
-        </a>
+        </button>
       </div>
 
-      <div id="navbarBasicExample" className="navbar-menu">
-        <div className="navbar-start">
-          <a className="navbar-item">Home</a>
+      <div
+        id="navbarBasicExample"
+        className={!active ? "navbar-menu" : "navbar-menu is-active"}
+      >
+        <div className="navbar-start"></div>
 
-          <a className="navbar-item">Documentation</a>
-
+        <div className="navbar-end">
           <div className="navbar-item has-dropdown is-hoverable">
-            <a className="navbar-link">More</a>
+            <a className="navbar-link">Samer Bahri</a>
 
             <div className="navbar-dropdown">
               <a className="navbar-item">About</a>
-              <a className="navbar-item">Jobs</a>
-              <a className="navbar-item">Contact</a>
+              <a className="navbar-item">Ssh</a>
+              <a className="navbar-item">Help</a>
               <hr className="navbar-divider" />
-              <a className="navbar-item">Report an issue</a>
-            </div>
-          </div>
-        </div>
-
-        <div className="navbar-end">
-          <div className="navbar-item">
-            <div className="buttons">
-              <a className="button is-primary">
-                <strong>Sign up</strong>
-              </a>
-              <a className="button is-light">Log in</a>
+              <a className="navbar-item">Logout</a>
             </div>
           </div>
         </div>
