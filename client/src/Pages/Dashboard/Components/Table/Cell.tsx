@@ -2,8 +2,9 @@ import React from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { faBook, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IRepoRenderInfo } from "../../../../Interfaces/IRepoRenderInfo";
 
-function Cell() {
+function Cell({ repo }: IRepoRenderInfo) {
   return (
     <div className="card repository-item">
       <div className="card-image logo-card has-text-centered">
@@ -17,7 +18,7 @@ function Cell() {
       <div className="card-content">
         <div className="media">
           <div className="media-content">
-            <p className="title is-4">marksheet</p>
+            <p className="title is-4">{repo.repository_name}</p>
             {/* <p className="subtitle is-6">
               {this.props.elem.Username || this.props.elem.Email}
             </p> */}

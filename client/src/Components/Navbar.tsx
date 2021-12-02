@@ -1,9 +1,13 @@
 import { faCodeBranch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { useUsername } from "../Contexts/UserContexts";
 
 function Navbar() {
   const [active, setActive] = useState(false);
+
+  const username = useUsername();
   return (
     <nav className="navbar" role="navigation" aria-label="main navigation">
       <div className="navbar-brand">
@@ -34,14 +38,21 @@ function Navbar() {
 
         <div className="navbar-end">
           <div className="navbar-item has-dropdown is-hoverable">
-            <a className="navbar-link">Samer Bahri</a>
+            <a className="navbar-link">{username}</a>
 
             <div className="navbar-dropdown">
-              <a className="navbar-item">About</a>
-              <a className="navbar-item">Ssh</a>
-              <a className="navbar-item">Help</a>
-              <hr className="navbar-divider" />
-              <a className="navbar-item">Logout</a>
+              <Link to="/about" className="navbar-item">
+                About
+              </Link>
+              <Link to="/ssh-settings" className="navbar-item">
+                SSH Settings
+              </Link>
+              <Link to="/help" className="navbar-item">
+                Help
+              </Link>
+              <Link to="/logout" className="navbar-item">
+                Logout
+              </Link>
             </div>
           </div>
         </div>

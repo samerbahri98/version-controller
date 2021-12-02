@@ -42,8 +42,8 @@ export class Repo extends BaseEntity implements IRepo {
   @Column()
   created_at!: Date;
 
-  @Field((of) => [Commit])
-  commits!: Commit[];
+  // @Field((of) => [Commit])
+  // commits!: Commit[];
 
   @Field()
   download!: Downloadable;

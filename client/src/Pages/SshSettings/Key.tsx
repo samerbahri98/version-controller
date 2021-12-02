@@ -1,13 +1,11 @@
 import React from "react";
+import { IPublicKeyRenderInfo } from "../../Interfaces/IPublicKeyRenderInfo";
 
-function Key() {
+function Key({ info }: IPublicKeyRenderInfo) {
   return (
-    <div className="notification is-link is-light">
+    <div className="notification is-link is-light public-key-list-item">
       <button className="delete"></button>
-      Primar lorem ipsum dolor sit amet, consectetur adipiscing elit lorem ipsum
-      dolor. <strong>Pellentesque risus mi</strong>, tempus quis placerat ut,
-      porta nec nulla. Vestibulum rhoncus ac ex sit amet fringilla. Nullam
-      gravida purus diam, et dictum <a>felis venenatis</a> efficitur.
+      {info.public_key_hash}
     </div>
   );
 }

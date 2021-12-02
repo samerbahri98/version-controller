@@ -58,7 +58,7 @@ const morgan = require("morgan");
         typeormGetConnection: getConnection, // for use with TypeORM
       }),
     ],
-    introspection: false,
+    // introspection: false,
   });
 
   await apolloServer.start();

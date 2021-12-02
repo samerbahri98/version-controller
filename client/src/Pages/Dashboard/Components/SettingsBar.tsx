@@ -1,8 +1,17 @@
 import { faList, faSearch, faTh } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
+import React, { useContext } from "react";
+import {
+  DashboardLayoutContext,
+  DashboardLayoutProvider,
+  useDashboardLayout,
+  useDashboardLayoutUpdateContext,
+} from "../../../Contexts/DashboardContexts";
 
 function SettingsBar() {
+  const dashboardLayout = useDashboardLayout();
+  const dashboardLayoutUpdate = useDashboardLayoutUpdateContext();
+
   return (
     <>
       <div className="panel-block">
@@ -32,16 +41,24 @@ function SettingsBar() {
         </p>
         <span className="navbar-item">
           <div
-            className="button is-small"
-            //   className={this.state.listBtn}  onClick={this.setList}
+            className={`button is-small ${
+              dashboardLayout === "Table" ? "is-primary" : ""
+            }`}
+            onClick={() =>
+              dashboardLayoutUpdate ? dashboardLayoutUpdate("Table") : null
+            }
           >
             <span className="icon">
               <FontAwesomeIcon icon={faList} />
             </span>
           </div>
           <div
-            className="button is-small"
-            //   className={this.state.matrixBtn} onClick={this.setMatrix}
+            className={`button is-small ${
+              dashboardLayout === "Matrix" ? "is-primary" : ""
+            }`}
+            onClick={() =>
+              dashboardLayoutUpdate ? dashboardLayoutUpdate("Matrix") : null
+            }
           >
             <span className="icon">
               <FontAwesomeIcon icon={faTh} />

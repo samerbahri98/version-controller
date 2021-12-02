@@ -26,6 +26,7 @@ import { IsAuth } from "../../middlewares/IsAuth";
 import { IContext } from "../../interfaces/IContext";
 import { AuthenticationError } from "apollo-server-errors";
 import { Ssh } from "../../services/Ssh";
+import { ReAuth } from "../../middlewares/ReAuth";
 
 @ArgsType()
 class LoginArgs {
@@ -94,7 +95,7 @@ export class AuthResolver implements ResolverInterface<Auth> {
 	}
 
 	@Query(() => Auth)
-	@UseMiddleware(IsAuth)
+	@UseMiddleware(ReAuth)
 	async generate_access_token(@Ctx() { payload }: IContext): Promise<Auth> {
 		if (!payload) throw new AuthenticationError("not authenticated");
 		const id = payload.userId;
