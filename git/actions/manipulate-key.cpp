@@ -44,7 +44,6 @@ void revoke(std::string key)
 
     swap_files(authorized_keys_temp, authorized_keys, [](std::string line) -> bool
                { return true; });
-    std::fstream f;
 
     std::filesystem::remove(authorized_keys_temp);
 }

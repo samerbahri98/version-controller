@@ -15,39 +15,6 @@ services:
       - app-network
     volumes:
       - ./git/vol/:/var/git
-  # queue:
-  #   image: "redis:alpine"
-  #   container_name: queue
-  #   volumes:
-  #     - ./data/queue:/data
-  #   networks:
-  #     - app-network
-  #   ports:
-  #     - 6379:6379
-  # worker-queue:
-  #   build: ./DockerImages/node/
-  #   image: node
-  #   env_file:
-  #     - .env
-  #   restart: always
-  #   container_name: worker-queue
-  #   volumes:
-  #     - ./worker-queue:/var/www/app
-  #   networks:
-  #     - app-network
-  #   environment:
-  #     # - NODE_ENV=development
-  #     # - REDIS_URL=queue
-  #     # - REDIS_PORT=6379
-  #     # - GIT_CONTAINER=git
-  #     - PORT=3000
-  #   links:
-  #     - queue
-  #   depends_on:
-  #     - queue
-  #   ports:
-  #     - "3000:3000"
-  #   command: sh -c 'npm install && npm run compile && npm run start'
 
   client:
     build: ./DockerImages/react/
@@ -61,11 +28,8 @@ services:
     networks:
       - app-network
     environment:
-      # - NODE_ENV=development
-      # - REDIS_URL=queue
-      # - REDIS_PORT=6379
-      # - GIT_CONTAINER=git
       - PORT=3000
+      - REACT_APP_API_URI=http://localhost:1337/graphql/
     links:
       - api
     depends_on:
@@ -74,7 +38,6 @@ services:
       - "3000:3000"
     command: sh -c 'npm install && npm start'
 
-    
   db:
     image: postgres
     env_file:
@@ -86,9 +49,6 @@ services:
       - ./data/pg:/var/lib/postgresql/data
     networks:
       - app-network
-    # environment:
-    #   - POSTGRES_PASSWORD=example
-    #   - PGDATA=/var/lib/postgresql/data
   # adminer is a  GUI for database, do not use for production
   adminer:
     image: michalhosna/adminer
@@ -110,20 +70,6 @@ services:
       - db
     depends_on:
       - db
-  # redis-commander:
-  #  image: rediscommander/redis-commander
-  #  container_name: redis-commander
-  #  networks:
-  #     - app-network
-  #  restart: always
-  #  links:
-  #    - queue
-  #  depends_on:
-  #    - queue
-  #  environment:
-  #    - REDIS_HOSTS=queue:6379
-  #  ports:
-  #    - 8081:8081
   api:
     build: ./DockerImages/node/
     env_file:
@@ -140,10 +86,6 @@ services:
       - PORT=1337
       - ACCESS_TOKEN_SECRET="ACCESS_TOKEN_SECRET"
       - REFRESH_TOKEN_SECRET="REFRESH_TOKEN_SECRET"
-    # links:
-    #   - queue
-    # depends_on:
-    #   - queue
     ports:
       - "1337:1337"
     command: sh -c 'npm install && npm run compile && npm run start'
