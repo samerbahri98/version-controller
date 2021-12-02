@@ -38,6 +38,8 @@ function Login(props: {
   useEffect(() => {
     if (data && data.login && data.login.accessToken) {
       localStorage.setItem("accessToken", data.login.accessToken);
+      localStorage.setItem("refreshToken", data.login.refreshToken);
+
       window.location.reload();
     }
   });
@@ -47,8 +49,8 @@ function Login(props: {
       {(client) => (
         <Formik
           initialValues={{
-            email: "samer.bahri@ieee.org",
-            password: "Samer123!",
+            email: "",
+            password: "",
           }}
           // children={undefined}
           onSubmit={async (values) => {

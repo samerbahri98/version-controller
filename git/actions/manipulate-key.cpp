@@ -44,6 +44,7 @@ void revoke(std::string key)
 
     swap_files(authorized_keys_temp, authorized_keys, [](std::string line) -> bool
                { return true; });
+    std::fstream f;
 
     std::filesystem::remove(authorized_keys_temp);
 }
@@ -71,5 +72,11 @@ int main(int argc, char *argv[])
         std::string key = "no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty " + std::string(argv[2]) + " " + std::string(argv[3]) + " " + std::string(argv[4]);
         set(key);
     }
+    std::fstream f;
+
+    f.open(authorized_keys, std::ios::app);
+    f << std::endl;
+    f.close();
+
     return 0;
 }

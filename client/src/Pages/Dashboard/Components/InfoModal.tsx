@@ -1,23 +1,57 @@
-import React from "react";
+import Modal from "../../../Components/Modal";
+import {
+  useInfoRepoContext,
+  useToggleInfoRepoContext,
+} from "../../../Contexts/DashboardContexts";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 function InfoModal() {
+  const infoRepo = useInfoRepoContext();
+  const toggleInfoRepo = useToggleInfoRepoContext();
   return (
-    <div className="modal">
-      <div className="modal-background"></div>
-      <div className="modal-card">
-        <header className="modal-card-head">
-          <p className="modal-card-title">Modal title</p>
-          <button className="delete" aria-label="close"></button>
-        </header>
-        <section className="modal-card-body">
-          {/* <!-- Content ... --> */}
-        </section>
-        <footer className="modal-card-foot">
-          <button className="button is-primary">Save changes</button>
-          <button className="button">Cancel</button>
-        </footer>
+    <Modal
+      title={infoRepo ? infoRepo.repository_name : ""}
+      onCancel={() => toggleInfoRepo(false)}
+      isVisible={infoRepo ? true : false}
+    >
+      <label className="label" style={{ textAlign: "left" }}>
+        http
+      </label>
+      <div className="field has-addons">
+        <div className="control is-expanded">
+          <input
+            className="input is-fullwidth is-primary"
+            type="text"
+            value={`git clone ${infoRepo?.download.http}`}
+            placeholder="Find a repository"
+          />
+        </div>
+        <div className="control">
+          <CopyToClipboard text={`git clone ${infoRepo?.download.http}`}>
+            <a className="button is-primary">Copy To Clipboard</a>
+          </CopyToClipboard>
+        </div>
       </div>
-    </div>
+
+      <label className="label" style={{ textAlign: "left" }}>
+        ssh
+      </label>
+      <div className="field has-addons">
+        <div className="control is-expanded">
+          <input
+            className="input is-fullwidth is-primary"
+            type="text"
+            value={`git clone ${infoRepo?.download.ssh}`}
+            placeholder="Find a repository"
+          />
+        </div>
+        <div className="control">
+          <CopyToClipboard text={"git clone "+infoRepo?.download.ssh}>
+            <a className="button is-primary">Copy To Clipboard</a>
+          </CopyToClipboard>
+        </div>
+      </div>
+    </Modal>
   );
 }
 

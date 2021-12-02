@@ -3,10 +3,17 @@ import CopyToClipboard from "react-copy-to-clipboard";
 import { faBook, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IRepoRenderInfo } from "../../../../Interfaces/IRepoRenderInfo";
+import { useToggleInfoRepoContext } from "../../../../Contexts/DashboardContexts";
 
 function Cell({ repo }: IRepoRenderInfo) {
+  const toggleInfoRepo = useToggleInfoRepoContext();
+
   return (
-    <div className="card repository-item">
+    <div
+      className="card repository-item"
+      role="button"
+      onClick={() => toggleInfoRepo(repo)}
+    >
       <div className="card-image logo-card has-text-centered">
         {/* <center> */}
         <figure className="image is-128x128 logo-container is-inline-block logoIMG">

@@ -58,12 +58,12 @@ function Register(props: {
   return (
     <Formik
       initialValues={{
-        first_name: "amani",
-        last_name: "brik",
-        username: "amanibrik5",
-        email: "amanibrik5@gmail.com",
-        password: "Amani123!!!",
-        phone: "123456789",
+        first_name: "",
+        last_name: "",
+        username: "",
+        email: "",
+        password: "",
+        phone: "",
       }}
       onSubmit={async (values) => submitRegister({ variables: values })}
     >

@@ -17,7 +17,6 @@ function Navbar() {
         </a>
 
         <button
-          role="button"
           className={!active ? "navbar-burger" : "navbar-burger is-active"}
           aria-label="menu"
           aria-expanded="false"
@@ -38,14 +37,14 @@ function Navbar() {
 
         <div className="navbar-end">
           <div className="navbar-item has-dropdown is-hoverable">
-            <a className="navbar-link">{username}</a>
+            <div className="navbar-link">{username}</div>
 
             <div className="navbar-dropdown">
               <Link to="/about" className="navbar-item">
                 About
               </Link>
               <Link to="/ssh-settings" className="navbar-item">
-                SSH Settings
+                SSH
               </Link>
               <Link to="/help" className="navbar-item">
                 Help

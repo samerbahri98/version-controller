@@ -39,7 +39,7 @@ export class Repo extends BaseEntity implements IRepo {
   created_by_id!: string;
 
   @Field()
-  @Column()
+  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   created_at!: Date;
 
   // @Field((of) => [Commit])
@@ -47,9 +47,4 @@ export class Repo extends BaseEntity implements IRepo {
 
   @Field()
   download!: Downloadable;
-
-  // @Field()
-  // files!: File[];
-  // @Field(()=>[Tag])
-  // tags?: Tag[];
 }

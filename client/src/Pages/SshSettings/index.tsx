@@ -1,5 +1,5 @@
 import React from "react";
-import { usePublicKeysList } from "../../Contexts/UserContexts";
+import { sortingFunction, usePublicKeysList } from "../../Contexts/UserContexts";
 import AddKey from "./AddKey";
 import Key from "./Key";
 

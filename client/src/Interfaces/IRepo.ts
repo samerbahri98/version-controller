@@ -6,5 +6,5 @@ export interface IRepo {
   repository_name: string;
   download: IDownloadable;
   created_by: IUser;
-  created_at?: Date;
+  created_at: string;
 }

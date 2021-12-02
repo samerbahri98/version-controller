@@ -1,13 +1,15 @@
 import React from "react";
-import { useReposList } from "../../../../Contexts/UserContexts";
+import { sortingFunction, useReposList, useSortRepoListContext } from "../../../../Contexts/UserContexts";
 import Matrix from "./Matrix";
 import Row from "./Row";
 
 function Table() {
+  const orderParam = useSortRepoListContext()
+  
   const reposList = useReposList();
   return (
     <>
-      {reposList.map((repo) => (
+      {reposList.sort(sortingFunction(orderParam)).map((repo) => (
         <Row key={repo.repository_id} repo={repo}/>
       ))}
       {/* <Row /> */}

@@ -1,12 +1,12 @@
 import {
-	Entity,
-	PrimaryGeneratedColumn,
-	Column,
-	BaseEntity,
-	OneToMany,
-	OneToOne,
-	ManyToMany,
-	JoinTable,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BaseEntity,
+  OneToMany,
+  OneToOne,
+  ManyToMany,
+  JoinTable,
 } from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 import { IUser } from "../interfaces/IUser";
@@ -17,48 +17,47 @@ import { PublicKey } from "./PublicKey";
 @ObjectType()
 @Entity({ name: "user_data" })
 export class User extends BaseEntity implements IUser {
-	@Field(() => ID)
-	@PrimaryGeneratedColumn("uuid")
-	user_id!: string;
+  @Field(() => ID)
+  @PrimaryGeneratedColumn("uuid")
+  user_id!: string;
 
-	@Field()
-	@Column()
-	first_name!: string;
+  @Field()
+  @Column()
+  first_name!: string;
 
-	@Field()
-	@Column()
-	last_name!: string;
+  @Field()
+  @Column()
+  last_name!: string;
 
-	@Field()
-	@Column()
-	username!: string;
+  @Field()
+  @Column()
+  username!: string;
 
-	@Field()
-	@Column()
-	email!: string;
+  @Field()
+  @Column()
+  email!: string;
 
-	@Column()
-	password!: string;
+  @Column()
+  password!: string;
 
-	@Field()
-	@Column()
-	created_at!: Date;
+  @Field()
+  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  created_at!: Date;
 
-	@Field()
-	attribution_tag!: string;
+  @Field()
+  attribution_tag!: string;
 
-	@Field()
-	@Column()
-	phone!: string;
+  @Field()
+  @Column()
+  phone!: string;
 
-	@Field(() => [Repo])
-	@OneToMany(() => Repo, (repository) => repository.created_by)
-	@TypeormLoader()
-	repositories?: Repo[];
+  @Field(() => [Repo])
+  @OneToMany(() => Repo, (repository) => repository.created_by)
+  @TypeormLoader()
+  repositories?: Repo[];
 
-	@Field(() => [PublicKey])
-	@OneToMany(() => PublicKey, (publicKey) => publicKey.created_by)
-	@TypeormLoader()
-	public_keys?: PublicKey[];
-
+  @Field(() => [PublicKey])
+  @OneToMany(() => PublicKey, (publicKey) => publicKey.created_by)
+  @TypeormLoader()
+  public_keys?: PublicKey[];
 }

@@ -19,20 +19,50 @@ function App() {
     <DashboardLayoutProvider>
       <UserProvider>
         <Router>
-          <Navbar />
           <Routes>
             {localStorage.getItem("accessToken") === null ? (
               <Route path="/" element={<Landing />} />
             ) : (
               <>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/ssh-settings" element={<SshSettings />} />
+                <Route
+                  path="/"
+                  element={
+                    <>
+                      <Navbar />
+                      <Dashboard />
+                    </>
+                  }
+                />
+                <Route
+                  path="/ssh-settings"
+                  element={
+                    <>
+                      <Navbar />
+                      <SshSettings />
+                    </>
+                  }
+                />
+                <Route
+                  path="/about"
+                  element={
+                    <>
+                      <Navbar />
+                      <About />
+                    </>
+                  }
+                />
+                <Route
+                  path="/help"
+                  element={
+                    <>
+                      <Navbar />
+                      <Help />
+                    </>
+                  }
+                />
                 <Route path="/logout" element={<Logout />} />
               </>
             )}
-
-            <Route path="/about" element={<About />} />
-            <Route path="/help" element={<Help />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>

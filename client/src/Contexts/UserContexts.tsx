@@ -14,6 +14,7 @@ import { IUserQueryReponse } from "../Interfaces/IUserQueryResponse";
 
 type RepoUpdateOneDelegate = (repo: IRepo | string) => void;
 type PublicKeyUpdateOneDelegate = (publicKey: IPublicKey | string) => void;
+type SortDelegate = (param: string) => void;
 type UpdateDelegate = () => void;
 
 const GET_USER_DATA_QUERY = gql`
@@ -51,6 +52,8 @@ const AddPublicKeyContext = createContext<PublicKeyUpdateOneDelegate | null>(
 const RevokePublicKeyContext = createContext<PublicKeyUpdateOneDelegate | null>(
   null
 );
+const SortUpdateRepoListContext = createContext<SortDelegate | null>(null);
+const SortRepoListContext = createContext<string>("NO");
 
 export function useUsername() {
   return useContext(UsernameContext);
@@ -68,11 +71,50 @@ export function useLogoutContext() {
   return useContext(LogoutContext);
 }
 
+export function useAppendRepoListContext() {
+  return useContext(AddRepoContext);
+}
+
+export function useSortUpdateRepoListContext() {
+  return useContext(SortUpdateRepoListContext);
+}
+
+export function useSortRepoListContext() {
+  return useContext(SortRepoListContext);
+}
+
+export function useAddPublicKey() {
+  return useContext(AddPublicKeyContext);
+}
+
+export function useRevokePublicKey() {
+  return useContext(RevokePublicKeyContext);
+}
+
+export const sortingFunction: (
+  param: string
+) => (a: IRepo, b: IRepo) => number = (param: string) => {
+  switch (param) {
+    case "ON":
+      return (a, b) =>
+        new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+    case "NO":
+      return (a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    case "AZ":
+      return (a, b) => a.repository_name.localeCompare(b.repository_name);
+    case "ZA":
+      return (a, b) => b.repository_name.localeCompare(a.repository_name);
+    default:
+      return (a, b) => 0;
+  }
+};
+
 export function UserProvider(props: PropsWithChildren<{}>) {
   const [username, setUsername] = useState<string>("");
-  const [attributionTag, setAttributionTag] = useState<string>("");
   const [reposList, setReposList] = useState<IRepo[]>([]);
   const [publicKeysList, setPublicKeysList] = useState<IPublicKey[]>([]);
+  const [orderParam, setOrderParam] = useState<string>("NO");
   const { data, loading, error, refetch } = useQuery<IUserQueryReponse>(
     GET_USER_DATA_QUERY,
     {
@@ -91,8 +133,28 @@ export function UserProvider(props: PropsWithChildren<{}>) {
         : setPublicKeysList([]);
     }
   }, [data]);
-  console.log(data);
 
+  const appendRepoList: RepoUpdateOneDelegate = (repo) => {
+    setReposList([repo as IRepo, ...reposList]);
+    // sortRepoList(orderParam);
+  };
+
+  const sortRepoList: SortDelegate = (param) => {
+    setOrderParam(param);
+  };
+
+  const addPublicKey: PublicKeyUpdateOneDelegate = (key) => {
+    setPublicKeysList([...publicKeysList, key as IPublicKey]);
+  };
+
+  const revokePublicKey: PublicKeyUpdateOneDelegate = (key) => {
+    const cKey = key as IPublicKey;
+    setPublicKeysList(
+      [...publicKeysList].filter(
+        (a) => a.public_key_hash !== cKey.public_key_hash
+      )
+    );
+  };
   const logout = () => {
     setUsername("");
     setReposList([]);
@@ -107,7 +169,19 @@ export function UserProvider(props: PropsWithChildren<{}>) {
           <ReposListContext.Provider value={reposList}>
             <PublicKeyListContext.Provider value={publicKeysList}>
               <LogoutContext.Provider value={logout}>
-                {props.children}
+                <AddRepoContext.Provider value={appendRepoList}>
+                  <SortUpdateRepoListContext.Provider value={sortRepoList}>
+                    <SortRepoListContext.Provider value={orderParam}>
+                      <AddPublicKeyContext.Provider value={addPublicKey}>
+                        <RevokePublicKeyContext.Provider
+                          value={revokePublicKey}
+                        >
+                          {props.children}
+                        </RevokePublicKeyContext.Provider>
+                      </AddPublicKeyContext.Provider>
+                    </SortRepoListContext.Provider>
+                  </SortUpdateRepoListContext.Provider>
+                </AddRepoContext.Provider>
               </LogoutContext.Provider>
             </PublicKeyListContext.Provider>
           </ReposListContext.Provider>

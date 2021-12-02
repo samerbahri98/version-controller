@@ -2,7 +2,6 @@ import React from "react";
 import { Field } from "formik";
 import IFIeldFormProps from "../../Interfaces/Form/IFieldFormProps";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 const FieldForm = (props: IFIeldFormProps) => {
   return (
