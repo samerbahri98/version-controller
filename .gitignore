@@ -12,3 +12,4 @@ api.bak2
 api.bak3
 logs
 worker-queue.bak
+.env

@@ -17,6 +17,7 @@ import { getConnection } from "typeorm";
 import { context } from "./middlewares/Context";
 import { SshInit } from "./config/ssh";
 import { PublicKeyResolver } from "./graphql/PublicKey/PublicKeyResolver";
+import { TicketResolver } from "./graphql/Ticket/TicketResolver";
 
 const morgan = require("morgan");
 
@@ -44,6 +45,7 @@ const morgan = require("morgan");
       UserResolver,
       RepositoryResolver,
       PublicKeyResolver,
+      TicketResolver,
     ],
   });
   const apolloServer = new ApolloServer({

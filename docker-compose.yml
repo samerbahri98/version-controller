@@ -79,7 +79,7 @@ services:
     container_name: api
     volumes:
       - ./api:/var/www/app
-      - ./git/vol/:/var/git
+      # - ./git/vol/:/var/git
     networks:
       - app-network
     environment:
