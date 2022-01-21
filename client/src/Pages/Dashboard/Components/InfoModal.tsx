@@ -4,6 +4,7 @@ import {
   useToggleInfoRepoContext,
 } from "../../../Contexts/DashboardContexts";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { ToastNotification } from "../../../Components/ToastNotification";
 
 function InfoModal() {
   const infoRepo = useInfoRepoContext();
@@ -27,7 +28,10 @@ function InfoModal() {
           />
         </div>
         <div className="control">
-          <CopyToClipboard text={`git clone ${infoRepo?.download.http}`}>
+          <CopyToClipboard text={`git clone ${infoRepo?.download.http}`} onCopy={()=>ToastNotification({
+            type:"success",
+            message:`${infoRepo?.repository_name} copied to your clipboard`
+          })}>
             <a className="button is-primary">Copy To Clipboard</a>
           </CopyToClipboard>
         </div>
@@ -46,7 +50,10 @@ function InfoModal() {
           />
         </div>
         <div className="control">
-          <CopyToClipboard text={"git clone "+infoRepo?.download.ssh}>
+          <CopyToClipboard text={"git clone "+infoRepo?.download.ssh} onCopy={()=>ToastNotification({
+            type:"warn",
+            message:`there are problems with ssh, use http instead`
+          })}>
             <a className="button is-primary">Copy To Clipboard</a>
           </CopyToClipboard>
         </div>

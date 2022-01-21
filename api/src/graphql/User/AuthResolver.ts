@@ -106,9 +106,9 @@ export class AuthResolver implements ResolverInterface<Auth> {
 	@Query(() => Auth)
 	async login(@Args() { email, password }: LoginArgs): Promise<Auth> {
 		const user = await User.findOne({ where: { email: email } });
-		if (!user) throw new Error("user doesn't exit");
+		if (!user) throw new AuthenticationError("user doesn't exit");
 		if (!(await bcrypt.compare(password, user.password || "")))
-			throw new Error("password is wrong");
+			throw new AuthenticationError("password is wrong");
 
 		const accessToken = Auth.createAccessToken(user);
 

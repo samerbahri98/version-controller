@@ -1,11 +1,13 @@
 import { Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import FieldForm from "../../Components/Form/FieldForm";
-
+import * as Yup from "yup";
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import ILoginFields from "../../Interfaces/Landing/ILoginFields";
 import { useQuery, gql, ApolloConsumer } from "@apollo/client";
 import { IAuth } from "../../Interfaces/IAuth";
+import { ToastNotification } from "../../Components/ToastNotification";
+import { loginSchema } from "./ErrorSchema/loginSchema";
 
 const LOGIN_QUERY = gql`
   query loginQuery($email: String!, $password: String!) {
@@ -41,6 +43,13 @@ function Login(props: {
       localStorage.setItem("refreshToken", data.login.refreshToken);
 
       window.location.reload();
+    } else {
+      error?.graphQLErrors.forEach((e) =>
+        ToastNotification({
+          type: "error",
+          message: e.message,
+        })
+      );
     }
   });
 
@@ -52,12 +61,12 @@ function Login(props: {
             email: "",
             password: "",
           }}
-          // children={undefined}
+          validationSchema={Yup.object().shape(loginSchema)}
           onSubmit={async (values) => {
             await refetch(values);
           }}
         >
-          {({ values }) => (
+          {({ errors, values }) => (
             <Form>
               <FieldForm
                 label="Email"
@@ -67,6 +76,8 @@ function Login(props: {
                 placeholder="email"
                 value={values.email}
                 icon={faEnvelope}
+                error={errors.email}
+                isValidatable={true}
               />
               <FieldForm
                 label="Password"
@@ -76,13 +87,9 @@ function Login(props: {
                 placeholder="password"
                 value={values.password}
                 icon={faLock}
+                error={errors.password}
+                isValidatable={true}
               />
-              {/* <div className="field">
-                <label htmlFor="" className="checkbox">
-                  <input type="checkbox" />
-                  Remember me
-                </label>
-              </div> */}
               <div className="field">
                 <button
                   className="button is-primary"

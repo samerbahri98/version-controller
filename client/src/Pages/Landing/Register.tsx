@@ -1,11 +1,13 @@
 import { Form, Formik } from "formik";
 import React, { useEffect } from "react";
 import FieldForm from "../../Components/Form/FieldForm";
-
+import * as Yup from "yup";
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import IRegisterFields from "../../Interfaces/Landing/IRegisterFields";
 import { gql, useMutation } from "@apollo/client";
 import { IAuth } from "../../Interfaces/IAuth";
+import { ToastNotification } from "../../Components/ToastNotification";
+import { registerSchema } from "./ErrorSchema/registerSchema";
 
 const REGISTER_MUTATION = gql`
   mutation registerMutation(
@@ -41,7 +43,7 @@ interface IRegisterPayload {
 function Register(props: {
   toggle: React.MouseEventHandler<HTMLButtonElement> | undefined;
 }) {
-  const [submitRegister, {data}] = useMutation<
+  const [submitRegister, { data, error }] = useMutation<
     IRegisterPayload,
     IRegisterFields
   >(REGISTER_MUTATION, {
@@ -53,6 +55,13 @@ function Register(props: {
     if (data && data.register && data.register.accessToken) {
       localStorage.setItem("accessToken", data.register.accessToken);
       window.location.reload();
+    } else {
+      error?.graphQLErrors.forEach((e) =>
+        ToastNotification({
+          type: "error",
+          message: e.message,
+        })
+      );
     }
   });
   return (
@@ -65,9 +74,10 @@ function Register(props: {
         password: "",
         phone: "",
       }}
+      validationSchema={Yup.object().shape(registerSchema)}
       onSubmit={async (values) => submitRegister({ variables: values })}
     >
-      {({ values }) => (
+      {({ errors, values }) => (
         <Form>
           <FieldForm
             label="First Name"
@@ -76,6 +86,8 @@ function Register(props: {
             name="first_name"
             placeholder="First Name"
             value={values.first_name}
+            error={errors.first_name}
+            isValidatable={true}
           />
 
           <FieldForm
@@ -85,6 +97,8 @@ function Register(props: {
             name="last_name"
             placeholder="Last Name"
             value={values.last_name}
+            error={errors.last_name}
+            isValidatable={true}
           />
           <FieldForm
             label="Username"
@@ -93,6 +107,8 @@ function Register(props: {
             name="username"
             placeholder="Username"
             value={values.username}
+            error={errors.username}
+            isValidatable={true}
           />
 
           <FieldForm
@@ -103,6 +119,8 @@ function Register(props: {
             placeholder="email"
             value={values.email}
             icon={faEnvelope}
+            error={errors.email}
+            isValidatable={true}
           />
 
           <FieldForm
@@ -113,6 +131,8 @@ function Register(props: {
             placeholder="password"
             value={values.password}
             icon={faLock}
+            error={errors.password}
+            isValidatable={true}
           />
 
           <FieldForm
@@ -122,6 +142,8 @@ function Register(props: {
             name="phone"
             placeholder="Phone"
             value={values.phone}
+            error={errors.phone}
+            isValidatable={true}
           />
 
           <div className="field">

@@ -8,7 +8,9 @@ interface IFIeldFormProps {
   placeholder: string;
   as?: string;
   value: string;
-  icon?:IconDefinition
+  icon?: IconDefinition;
+  error?: string;
+  isValidatable?: boolean
 }
 
 export default IFIeldFormProps;

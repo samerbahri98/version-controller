@@ -8,11 +8,12 @@ import Help from "./Pages/Help";
 import Landing from "./Pages/Landing/";
 import SshSettings from "./Pages/SshSettings";
 import NotFound from "./Pages/NotFound";
-
+import "react-toastify/scss/main.scss";
 import "./style.scss";
 import { DashboardLayoutProvider } from "./Contexts/DashboardContexts";
 import { UserProvider } from "./Contexts/UserContexts";
 import Logout from "./Pages/Logout";
+import { Slide, ToastContainer } from "react-toastify";
 
 function App() {
   return (
@@ -21,7 +22,21 @@ function App() {
         <Router>
           <Routes>
             {localStorage.getItem("accessToken") === null ? (
-              <Route path="/" element={<Landing />} />
+              <Route
+                path="/"
+                element={
+                  <>
+                    <ToastContainer
+                      icon={false}
+                      hideProgressBar={true}
+                      newestOnTop={true}
+                      transition={Slide}
+                    />
+
+                    <Landing />
+                  </>
+                }
+              />
             ) : (
               <>
                 <Route
@@ -29,6 +44,14 @@ function App() {
                   element={
                     <>
                       <Navbar />
+
+                      <ToastContainer
+                        icon={false}
+                        hideProgressBar={true}
+                        newestOnTop={true}
+                        transition={Slide}
+                      />
+
                       <Dashboard />
                     </>
                   }
