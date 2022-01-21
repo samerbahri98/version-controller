@@ -45,6 +45,7 @@ const ReposListContext = createContext<IRepo[]>([]);
 const PublicKeyListContext = createContext<IPublicKey[]>([]);
 const UsernameContext = createContext<string>("");
 const LogoutContext = createContext<UpdateDelegate | null>(null);
+const LoginContext = createContext<UpdateDelegate | null>(null);
 const AddRepoContext = createContext<RepoUpdateOneDelegate | null>(null);
 const AddPublicKeyContext = createContext<PublicKeyUpdateOneDelegate | null>(
   null

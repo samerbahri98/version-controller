@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import { ITicketFields, ITicketPayload } from "../../Interfaces/ITicket";
 import { useEffect } from "react";
+import { ToastNotification } from "../../Components/ToastNotification";
 
 const SUBMIT_TICKET_MUTATION = gql`
   mutation ($Message: String!, $Subject: String!) {
@@ -26,7 +27,18 @@ function Help() {
 
   const handleSubmit = async (values: ITicketFields) => {
     submitTicket({ variables: values });
-    navigate("/");
+    if (error)
+      ToastNotification({
+        type: "error",
+        message: "And error had occured!",
+      });
+    else {
+      ToastNotification({
+        type: "success",
+        message: "Ticket submitted successfully",
+      });
+      navigate("/");
+    }
   };
 
   return (
