@@ -1,5 +1,9 @@
+import { IRepo } from "./IRepo";
+
 export interface IFile {
-	name?: string;
-	directory?: string;
-	content?: string;
+  name: string;
+  type: string;
+  content: string;
+  directory: string;
+  repo?: IRepo;
 }

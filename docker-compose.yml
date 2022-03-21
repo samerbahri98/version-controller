@@ -11,10 +11,14 @@ services:
     ports:
       - "80:80"
       - "22:22"
+      - "50000:50000"
     networks:
       - app-network
+    environment:
+      - GRPC_PORT=50000
     volumes:
       - ./git/vol/:/var/git
+      - ./git/server/src:/var/server
 
   client:
     build: ./DockerImages/react/

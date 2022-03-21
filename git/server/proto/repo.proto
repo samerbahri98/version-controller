@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package git;
+
+message Repo {
+    string name = 1;
+    string user = 2;
+}
+
+service ManipulateRepo{
+    rpc CreateRepo(Repo) returns (Repo);
+}
+
+message Commit {
+    Repo repo = 1;
+    string hash = 2;
+    string hash_abbv = 3;
+    string tree_hash = 4;
+    string tree_hash_abbv = 5;
+    string parent_hash = 6;
+    string parent_hash_abbv = 7;
+    string commit_message = 8;
+    int64 date = 9;
+}
+
+message Commits {
+    repeated Commit commits = 1;
+}
+
+service GetCommits {
+    rpc GetHeadCommit (Repo) returns (Commit);
+    rpc FindAllCommits (Repo) returns (Commits);
+}
+
+// message File {
+//     Repo repo = 1;
+//     string name = 2;
+//     string type = 3; // Directory, File,
+//     string directory =4;
+//     string commit_hash = 5;
+// }
+
+// message Files {
+//     repeated File files =1;
+// }

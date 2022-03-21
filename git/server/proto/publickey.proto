@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package git;
+import "user.proto";
+
+message Publickey {
+    string key = 1;
+    string user = 2;
+}
+
+service ManipulateKeys{
+    rpc SetKey(Publickey) returns (Username);
+    rpc RevokeKey(Publickey) returns (Username);
+}
