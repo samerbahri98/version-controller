@@ -5,8 +5,8 @@ import {
   useDashboardLayout,
   useDashboardLayoutUpdateContext,
   useToggleAddRepoContext,
-} from "../../../Contexts/DashboardContexts";
-import { useSortUpdateRepoListContext } from "../../../Contexts/UserContexts";
+} from "../../Contexts/DashboardContexts";
+import { useSortUpdateRepoListContext } from "../../Contexts/UserContexts";
 
 function SettingsBar() {
   const dashboardLayout = useDashboardLayout();

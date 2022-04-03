@@ -14,6 +14,7 @@ import { DashboardLayoutProvider } from "./Contexts/DashboardContexts";
 import { UserProvider } from "./Contexts/UserContexts";
 import Logout from "./Pages/Logout";
 import { Slide, ToastContainer } from "react-toastify";
+import Repo from "./Pages/Repo/Repo";
 
 function App() {
   return (
@@ -51,11 +52,28 @@ function App() {
                         newestOnTop={true}
                         transition={Slide}
                       />
-
                       <Dashboard />
                     </>
                   }
                 />
+                <Route
+                  path="/repo/:id"
+                  element={
+                    <>
+                      <Navbar />
+                      <ToastContainer
+                        icon={false}
+                        hideProgressBar={true}
+                        newestOnTop={true}
+                        transition={Slide}
+                      />
+                      <Repo />
+                    </>
+                  }
+                >
+                  <Route path="commits"></Route>
+                  <Route path="branches"></Route>
+                </Route>
                 <Route
                   path="/ssh-settings"
                   element={

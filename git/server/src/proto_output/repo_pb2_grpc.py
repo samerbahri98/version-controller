@@ -66,7 +66,68 @@ class ManipulateRepo(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
 
-class GetCommitsStub(object):
+class ManipulateBranchesStub(object):
+    """Missing associated documentation comment in .proto file."""
+
+    def __init__(self, channel):
+        """Constructor.
+
+        Args:
+            channel: A grpc.Channel.
+        """
+        self.ListBranches = channel.unary_unary(
+                '/git.ManipulateBranches/ListBranches',
+                request_serializer=repo__pb2.Repo.SerializeToString,
+                response_deserializer=repo__pb2.Branches.FromString,
+                )
+
+
+class ManipulateBranchesServicer(object):
+    """Missing associated documentation comment in .proto file."""
+
+    def ListBranches(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+
+def add_ManipulateBranchesServicer_to_server(servicer, server):
+    rpc_method_handlers = {
+            'ListBranches': grpc.unary_unary_rpc_method_handler(
+                    servicer.ListBranches,
+                    request_deserializer=repo__pb2.Repo.FromString,
+                    response_serializer=repo__pb2.Branches.SerializeToString,
+            ),
+    }
+    generic_handler = grpc.method_handlers_generic_handler(
+            'git.ManipulateBranches', rpc_method_handlers)
+    server.add_generic_rpc_handlers((generic_handler,))
+
+
+ # This class is part of an EXPERIMENTAL API.
+class ManipulateBranches(object):
+    """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def ListBranches(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/git.ManipulateBranches/ListBranches',
+            repo__pb2.Repo.SerializeToString,
+            repo__pb2.Branches.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+
+class ManipulateCommitsStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -76,18 +137,18 @@ class GetCommitsStub(object):
             channel: A grpc.Channel.
         """
         self.GetHeadCommit = channel.unary_unary(
-                '/git.GetCommits/GetHeadCommit',
+                '/git.ManipulateCommits/GetHeadCommit',
                 request_serializer=repo__pb2.Repo.SerializeToString,
                 response_deserializer=repo__pb2.Commit.FromString,
                 )
         self.FindAllCommits = channel.unary_unary(
-                '/git.GetCommits/FindAllCommits',
+                '/git.ManipulateCommits/FindAllCommits',
                 request_serializer=repo__pb2.Repo.SerializeToString,
                 response_deserializer=repo__pb2.Commits.FromString,
                 )
 
 
-class GetCommitsServicer(object):
+class ManipulateCommitsServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def GetHeadCommit(self, request, context):
@@ -103,7 +164,7 @@ class GetCommitsServicer(object):
         raise NotImplementedError('Method not implemented!')
 
 
-def add_GetCommitsServicer_to_server(servicer, server):
+def add_ManipulateCommitsServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'GetHeadCommit': grpc.unary_unary_rpc_method_handler(
                     servicer.GetHeadCommit,
@@ -117,12 +178,12 @@ def add_GetCommitsServicer_to_server(servicer, server):
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'git.GetCommits', rpc_method_handlers)
+            'git.ManipulateCommits', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
  # This class is part of an EXPERIMENTAL API.
-class GetCommits(object):
+class ManipulateCommits(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
@@ -136,7 +197,7 @@ class GetCommits(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/git.GetCommits/GetHeadCommit',
+        return grpc.experimental.unary_unary(request, target, '/git.ManipulateCommits/GetHeadCommit',
             repo__pb2.Repo.SerializeToString,
             repo__pb2.Commit.FromString,
             options, channel_credentials,
@@ -153,8 +214,102 @@ class GetCommits(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/git.GetCommits/FindAllCommits',
+        return grpc.experimental.unary_unary(request, target, '/git.ManipulateCommits/FindAllCommits',
             repo__pb2.Repo.SerializeToString,
             repo__pb2.Commits.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+
+class ManipulateFilesStub(object):
+    """Missing associated documentation comment in .proto file."""
+
+    def __init__(self, channel):
+        """Constructor.
+
+        Args:
+            channel: A grpc.Channel.
+        """
+        self.GetHeadCommitFiles = channel.unary_unary(
+                '/git.ManipulateFiles/GetHeadCommitFiles',
+                request_serializer=repo__pb2.Branch.SerializeToString,
+                response_deserializer=repo__pb2.Files.FromString,
+                )
+        self.GetMasterHeadCommitFiles = channel.unary_unary(
+                '/git.ManipulateFiles/GetMasterHeadCommitFiles',
+                request_serializer=repo__pb2.Repo.SerializeToString,
+                response_deserializer=repo__pb2.Files.FromString,
+                )
+
+
+class ManipulateFilesServicer(object):
+    """Missing associated documentation comment in .proto file."""
+
+    def GetHeadCommitFiles(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetMasterHeadCommitFiles(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+
+def add_ManipulateFilesServicer_to_server(servicer, server):
+    rpc_method_handlers = {
+            'GetHeadCommitFiles': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetHeadCommitFiles,
+                    request_deserializer=repo__pb2.Branch.FromString,
+                    response_serializer=repo__pb2.Files.SerializeToString,
+            ),
+            'GetMasterHeadCommitFiles': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetMasterHeadCommitFiles,
+                    request_deserializer=repo__pb2.Repo.FromString,
+                    response_serializer=repo__pb2.Files.SerializeToString,
+            ),
+    }
+    generic_handler = grpc.method_handlers_generic_handler(
+            'git.ManipulateFiles', rpc_method_handlers)
+    server.add_generic_rpc_handlers((generic_handler,))
+
+
+ # This class is part of an EXPERIMENTAL API.
+class ManipulateFiles(object):
+    """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def GetHeadCommitFiles(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/git.ManipulateFiles/GetHeadCommitFiles',
+            repo__pb2.Branch.SerializeToString,
+            repo__pb2.Files.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetMasterHeadCommitFiles(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/git.ManipulateFiles/GetMasterHeadCommitFiles',
+            repo__pb2.Repo.SerializeToString,
+            repo__pb2.Files.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

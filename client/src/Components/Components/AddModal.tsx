@@ -1,14 +1,14 @@
 import { Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
-import Modal from "../../../Components/Modal";
+import Modal from "../Modal";
 import {
   useAddRepoContext,
   useToggleAddRepoContext,
-} from "../../../Contexts/DashboardContexts";
+} from "../../Contexts/DashboardContexts";
 import { gql, useMutation } from "@apollo/client";
-import { IRepo } from "../../../Interfaces/IRepo";
-import FieldForm from "../../../Components/Form/FieldForm";
-import { useAppendRepoListContext } from "../../../Contexts/UserContexts";
+import { IRepo } from "../../Interfaces/IRepo";
+import FieldForm from "../Form/FieldForm";
+import { useAppendRepoListContext } from "../../Contexts/UserContexts";
 
 const ADD_REPO_MUTATION = gql`
   mutation ($repository_name: String!) {

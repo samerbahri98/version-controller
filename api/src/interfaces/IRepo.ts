@@ -8,5 +8,5 @@ export interface IRepo {
   // commits: Commit[];
   download: Downloadable;
   created_by: User;
-  created_at?: Date;
+  created_at: Date;
 }

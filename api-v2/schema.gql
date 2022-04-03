@@ -1,0 +1,68 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Auth {
+  accessToken: String!
+  refreshToken: String!
+  user: User!
+}
+
+input CreateUserInput {
+  email: String!
+  first_name: String!
+  last_name: String!
+  password: String!
+  phone: String!
+  username: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Downloadable {
+  http: String!
+  ssh: String!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  register(email: String!, first_name: String!, last_name: String!, password: String!, phone: String!, username: String!): Auth!
+  removeUser(id: Int!): User!
+}
+
+type PublicKey {
+  created_at: DateTime!
+  created_by: User!
+  public_key_encryption_type: String!
+  public_key_hash: String!
+  public_key_id: ID!
+}
+
+type Query {
+  currentUser: User!
+  login(email: String!, password: String!): Auth!
+}
+
+type Repo {
+  created_at: DateTime!
+  created_by: User!
+  download: Downloadable!
+  repository_id: ID!
+  repository_name: String!
+}
+
+type User {
+  attribution_tag: String!
+  created_at: DateTime!
+  email: String!
+  first_name: String!
+  last_name: String!
+  phone: String!
+  public_keys: [PublicKey!]!
+  repositories: [Repo!]!
+  user_id: ID!
+  username: String!
+}

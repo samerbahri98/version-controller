@@ -11,6 +11,20 @@ service ManipulateRepo{
     rpc CreateRepo(Repo) returns (Repo);
 }
 
+message Branch{
+    Repo repo =1;
+    string name =2;
+}
+
+message Branches{
+    Repo repo = 1;
+    repeated string branches=2;
+}
+
+service ManipulateBranches{
+    rpc ListBranches(Repo) returns (Branches);
+}
+
 message Commit {
     Repo repo = 1;
     string hash = 2;
@@ -27,19 +41,23 @@ message Commits {
     repeated Commit commits = 1;
 }
 
-service GetCommits {
+service ManipulateCommits {
     rpc GetHeadCommit (Repo) returns (Commit);
     rpc FindAllCommits (Repo) returns (Commits);
 }
 
-// message File {
-//     Repo repo = 1;
-//     string name = 2;
-//     string type = 3; // Directory, File,
-//     string directory =4;
-//     string commit_hash = 5;
-// }
+message File {
+    Branch branch = 1;
+    string name = 2;
+    string type = 3; // Directory, File,
+    string directory =4;
+}
 
-// message Files {
-//     repeated File files =1;
-// }
+message Files {
+    repeated File files =1;
+}
+
+service ManipulateFiles{
+    rpc GetHeadCommitFiles (Branch) returns (Files);
+    rpc GetMasterHeadCommitFiles(Repo) returns (Files);
+}

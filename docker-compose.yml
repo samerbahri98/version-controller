@@ -82,7 +82,7 @@ services:
     restart: always
     container_name: api
     volumes:
-      - ./api:/var/www/app
+      - ./api-v2:/var/www/app
       # - ./git/vol/:/var/git
     networks:
       - app-network
@@ -92,7 +92,8 @@ services:
       - REFRESH_TOKEN_SECRET="REFRESH_TOKEN_SECRET"
     ports:
       - "1337:1337"
-    command: sh -c 'npm install && npm run compile && npm run start'
+    # command: sh -c 'npm install && npm run compile && npm run start'
+    command: sh -c 'npm install && npm run start:dev'
 
 networks:
   app-network:

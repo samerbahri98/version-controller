@@ -1,10 +1,10 @@
-import Modal from "../../../Components/Modal";
+import Modal from "../Modal";
 import {
   useInfoRepoContext,
   useToggleInfoRepoContext,
-} from "../../../Contexts/DashboardContexts";
+} from "../../Contexts/DashboardContexts";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { ToastNotification } from "../../../Components/ToastNotification";
+import { ToastNotification } from "../ToastNotification";
 
 function InfoModal() {
   const infoRepo = useInfoRepoContext();
