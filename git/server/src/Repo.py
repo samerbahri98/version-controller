@@ -1,11 +1,12 @@
-from proto_output import repo_pb2
-from proto_output import repo_pb2_grpc
+import repo_pb2
+import repo_pb2_grpc
 import os
 import subprocess
+from google.protobuf.json_format import MessageToDict, ParseDict
 
 master_dir = "/var/git"
 
-
+# master_dir = "/home/samer/Projects/docker/version-controller/git/vol"
 class Repo(repo_pb2_grpc.ManipulateRepo):
     def CreateRepo(self, request, context):
         repo_dir = f"{master_dir}/{request.user}/{request.name}.git"
@@ -32,16 +33,23 @@ class File(repo_pb2_grpc.ManipulateFiles):
         for line in lines:
             if "/" in line:
                 files.append({
-                    "branch": "master",
+                    "branch": {
+                        "name":"master",
+                        "repo":request
+                        },
                     "name": line.split("/")[0],
                     "type": "folder",
                     "directory": "/"
                 })
             else:
                 files.append({
-                    "branch": "master",
+                    "branch": {
+                        "name":"master",
+                        "repo":request
+                        },
                     "name": line,
                     "type": "file",
                     "directory": "/"
                 })
-        return repo_pb2.Files()
+        return repo_pb2.Files(files=files)
+

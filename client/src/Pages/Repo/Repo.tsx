@@ -43,12 +43,22 @@ const files = [
 
 const md = `
 # H1
-
-**yes**
-
 ## H2
-
 ### H3
+
+**bold text** *italic text*
+1) list
+2) list
+
+| Syntax      | Description |
+| ----------- | ----------- |
+| Header      | Title       |
+| Paragraph   | Text        |
+---
+code:
+\`\`\`sql
+SELECT * FROM STUDENTS ORDER BY NAME;
+\`\`\`
 `;
 function Repo() {
   const dashboardLayout = useDashboardLayout();

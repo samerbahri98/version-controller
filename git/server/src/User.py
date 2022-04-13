@@ -1,13 +1,16 @@
 
 
+from re import S
 import grpc
 import os
+import sys
 
-from proto_output import user_pb2 as user__pb2
-from proto_output import user_pb2_grpc
 
-from proto_output import publickey_pb2 as publickey__pb2
-from proto_output import publickey_pb2_grpc
+import user_pb2 as user__pb2
+import user_pb2_grpc
+
+import publickey_pb2 as publickey__pb2
+import publickey_pb2_grpc
 
 authorizedKeysDir = "/var/git/.ssh/authorized_keys"
 
