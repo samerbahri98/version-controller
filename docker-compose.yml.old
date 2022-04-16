@@ -1,0 +1,104 @@
+version: "3.3"
+
+services:
+  # git
+  git:
+    build: ./DockerImages/git/
+    image: git
+    container_name: git
+    hostname: git-ssh-server
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "22:22"
+      - "50000:50000"
+    networks:
+      - app-network
+    environment:
+      - GRPC_PORT=50000
+    volumes:
+      - ./git/vol/:/var/git
+      - ./git/server/src:/var/server
+
+  client:
+    build: ./DockerImages/react/
+    image: react
+    env_file:
+      - .env
+    restart: always
+    container_name: client
+    volumes:
+      - ./client:/var/www/app
+    networks:
+      - app-network
+    environment:
+      - PORT=3000
+      - REACT_APP_API_URI=http://localhost:1337/graphql/
+    links:
+      - api
+    depends_on:
+      - "api"
+    ports:
+      - "3000:3000"
+    command: sh -c 'npm install && npm start'
+
+  db:
+    image: postgres
+    env_file:
+      - .env
+    container_name: db
+    restart: always
+    volumes:
+      - ./setup/db:/setup
+      - ./data/pg:/var/lib/postgresql/data
+    networks:
+      - app-network
+  # adminer is a  GUI for database, do not use for production
+  adminer:
+    image: michalhosna/adminer
+    container_name: adminer
+    networks:
+      - app-network
+    restart: always
+    ports:
+      - 8080:8080
+    environment:
+      ADMINER_DB: git
+      ADMINER_DRIVER: pgsql
+      ADMINER_PASSWORD: example
+      ADMINER_SERVER: db
+      ADMINER_USERNAME: postgres
+      ADMINER_AUTOLOGIN: 1
+      ADMINER_NAME: This will be in the title!
+    links:
+      - db
+    depends_on:
+      - db
+  api:
+    build: ./DockerImages/node/
+    env_file:
+      - .env
+    image: node
+    restart: always
+    container_name: api
+    volumes:
+      - ./api-v2:/var/www/app
+      # - ./git/vol/:/var/git
+    networks:
+      - app-network
+    environment:
+      - PORT=1337
+      - ACCESS_TOKEN_SECRET="ACCESS_TOKEN_SECRET"
+      - REFRESH_TOKEN_SECRET="REFRESH_TOKEN_SECRET"
+    ports:
+      - "1337:1337"
+    # command: sh -c 'npm install && npm run compile && npm run start'
+    command: sh -c 'npm install && npm run start:dev'
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  git-storage:
+  git-data:
