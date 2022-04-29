@@ -1,0 +1,19 @@
+{
+  "name": "initializer-job",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "init": "node ./index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dockerode": "^3.3.1",
+    "node-ssh": "^12.0.4",
+    "pg": "^8.7.3",
+    "sshpk": "^1.17.0"
+  }
+}

@@ -1,0 +1,60 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:14
+    env_file:
+      - .env
+    container_name: db
+    restart: always
+    volumes:
+      - ./initializer-job/db:/setup
+      - ./data/pg:/var/lib/postgresql/data
+      - ./initializer-job/db/db.sh:/docker-entrypoint-initdb.d/db.sh
+    networks:
+      - app-network
+
+  # adminer is a  GUI for database, do not use for production
+  adminer:
+    image: michalhosna/adminer
+    container_name: adminer
+    networks:
+      - app-network
+    restart: always
+    ports:
+      - 8080:8080
+    environment:
+      ADMINER_DB: git
+      ADMINER_DRIVER: pgsql
+      ADMINER_PASSWORD: example
+      ADMINER_SERVER: db
+      ADMINER_USERNAME: postgres
+      ADMINER_AUTOLOGIN: 1
+      ADMINER_NAME: This will be in the title!
+    links:
+      - db
+    depends_on:
+      - db
+  initializer-job:
+    build: ./initializer-job
+    links:
+      - db
+      - git
+    depends_on:
+      - db
+      - git
+    networks:
+      - app-network
+    container_name: initializer-job
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    env_file:
+      - .env
+  git:
+    image: alpine:latest
+    container_name: git
+    command:  tail -f /dev/null
+
+networks:
+  app-network:
+    driver: bridge
