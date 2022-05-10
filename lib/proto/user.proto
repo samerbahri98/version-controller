@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package git;
+
+message User {
+    string name = 1;
+    string password = 2;
+}
+
+message Username{
+    string name =1;
+}
+
+service CreateUser {
+    rpc CreateUser(User) returns (Username);
+}

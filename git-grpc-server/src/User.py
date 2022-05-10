@@ -1,6 +1,7 @@
 
 
 from re import S
+import docker
 import grpc
 import os
 import sys
@@ -13,6 +14,7 @@ import publickey_pb2 as publickey__pb2
 import publickey_pb2_grpc
 
 authorizedKeysDir = "/var/git/.ssh/authorized_keys"
+client= docker.from_env()
 
 
 class User(user_pb2_grpc.CreateUser):

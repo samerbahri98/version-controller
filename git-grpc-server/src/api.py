@@ -16,7 +16,6 @@ def serve():
     user_pb2_grpc.add_CreateUserServicer_to_server (User(), server)
     publickey_pb2_grpc.add_ManipulateKeysServicer_to_server(PublicKeys(),server)
     repo_pb2_grpc.add_ManipulateFilesServicer_to_server(File(),server)
-    # server.add_insecure_port(f"[::]:{os.environ['GRPC_PORT']}")
     server.add_insecure_port(f"[::]:50000")
     server.start()
     print("server running")

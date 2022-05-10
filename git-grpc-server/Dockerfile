@@ -23,14 +23,15 @@ RUN chsh git -s '/usr/bin/git-shell'
 
 WORKDIR /usr/src/app
 
-COPY reqirements.txt ./
+COPY requirements.txt ./
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 COPY ${PROTO_DIRECTORY} ./protp
 COPY protoc.sh ./protoc.sh
 RUN chmod +x protoc.sh
-RUN ./protoc.sh
 
 COPY . .
+
+RUN ./protoc.sh
 
 CMD [ "python3", "./src/api.py" ]

@@ -41,10 +41,10 @@ services:
     build: ./initializer
     links:
       - db
-      - git-ssh-server
+      - git
     depends_on:
       - db
-      - git-ssh-server
+      - git
     networks:
       - app-network
     container_name: initializer
@@ -64,41 +64,40 @@ services:
       - app-network
     volumes:
       - ./git-volume:/var/git
-  # api:
-  #   build: ./api
-  #   container_name: api
-  #   restart: unless-stopped
-  #   ports:
-  #     - "1337:1337"
-  #   networks:
-  #     - app-network
-  #   env_file:
-  #     - .env
-  #   environment:
-  #     - PORT=1337
-  #     - ACCESS_TOKEN_SECRET="ACCESS_TOKEN_SECRET"
-  #     - REFRESH_TOKEN_SECRET="REFRESH_TOKEN_SECRET"
   api:
-    build: ./DockerImages/node/
-    env_file:
-      - .env
-    image: node
-    restart: always
+    build: ./api
     container_name: api
-    volumes:
-      - ./api:/var/www/app
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      # - ./git/vol/:/var/git
+    restart: unless-stopped
+    ports:
+      - "1337:1337"
     networks:
       - app-network
+    env_file:
+      - .env
     environment:
       - PORT=1337
       - ACCESS_TOKEN_SECRET="ACCESS_TOKEN_SECRET"
       - REFRESH_TOKEN_SECRET="REFRESH_TOKEN_SECRET"
-    ports:
-      - "1337:1337"
-    # command: sh -c 'npm install && npm run compile && npm run start'
-    command: sh -c 'npm install && npm run start:dev'
+  # api:
+  #   build: ./DockerImages/node/
+  #   env_file:
+  #     - .env
+  #   image: node
+  #   restart: always
+  #   container_name: api
+  #   volumes:
+  #     - ./api-v2:/var/www/app
+  #     # - ./git/vol/:/var/git
+  #   networks:
+  #     - app-network
+  #   environment:
+  #     - PORT=1337
+  #     - ACCESS_TOKEN_SECRET="ACCESS_TOKEN_SECRET"
+  #     - REFRESH_TOKEN_SECRET="REFRESH_TOKEN_SECRET"
+  #   ports:
+  #     - "1337:1337"
+  #   # command: sh -c 'npm install && npm run compile && npm run start'
+  #   command: sh -c 'npm install && npm run start:dev'
 
 
 

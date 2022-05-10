@@ -7,7 +7,6 @@ const dbPromise = new Promise(async (resolve, reject) => {
 
 	client.query("select * from user_data", (err, res) => {
 		if (err) throw err;
-		// console.log(res);
 		// client.end();
 	});
 });

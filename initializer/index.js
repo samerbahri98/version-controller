@@ -1,5 +1,11 @@
-const {jobs} = require("./jobs");
+const {reset,jobs,restart} = require("./jobs");
 
 (async () => {
-	await Promise.all(jobs);
+	console.log("--- start initialization job ---")
+	await reset
+	await Promise.all(jobs)
+	await restart
+	console.log("--- end initialization job ---")
+	process.exit(0)
 })();
+
