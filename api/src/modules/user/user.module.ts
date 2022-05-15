@@ -8,6 +8,7 @@ import { RepoModule } from '../repo/repo.module';
 import { GitServerModule } from '../git-server/git-server.module';
 import { UserDbService } from './services/user-db/user-db.service';
 import { UserGitService } from './services/user-git/user-git.service';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   providers: [UserResolver, UserService, UserDbService,UserGitService],
@@ -16,6 +17,7 @@ import { UserGitService } from './services/user-git/user-git.service';
     forwardRef(() => RepoModule),
     TypeOrmModule.forFeature([User]),
     GitServerModule,
+    forwardRef(()=>AuthModule)
   ],
   exports: [UserService],
 })

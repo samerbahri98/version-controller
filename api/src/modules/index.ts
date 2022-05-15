@@ -1,4 +1,5 @@
 import { AuthModule } from './auth/auth.module';
+import { CommitModule } from './commit/commit.module';
 import { DbModule } from './db/db.module';
 import { GraphqlModule } from './graphql/graphql.module';
 import { PublicKeyModule } from './public-key/public-key.module';
@@ -12,4 +13,5 @@ export const modules = [
   AuthModule,
   RepoModule,
   PublicKeyModule,
+  CommitModule,
 ];

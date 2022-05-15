@@ -12,12 +12,7 @@ export class UserGitService {
   ) {}
   async create(createUserInput: CreateUserInput): Promise<any> {
     const userDirectory = '/var/git/' + createUserInput.username;
-    const Cmd = [
-      ...this.gitCmdService.createDirectory(userDirectory),
-      // '&&',
-      // ...this.gitCmdService.changeFileGitOwnershipCmd(userDirectory),
-    ];
-    return this.gitServerService.exec(Cmd);
+    return this.gitCmdService.createDirectory(userDirectory);
   }
   
 }

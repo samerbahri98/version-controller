@@ -7,7 +7,7 @@ export class DockerService {
 
   constructor() {}
 
-  public get client():Docker {
+  public client():Docker {
     return this._client
   }
 }

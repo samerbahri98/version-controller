@@ -13,8 +13,8 @@ export class UserService {
     private readonly userDbService: UserDbService,
   ) {}
 
-  async create(createUserInput: CreateUserInput): Promise<User> {
-    return await Promise.all([
+  create(createUserInput: CreateUserInput): Promise<User> {
+    return Promise.all([
       this.userDbService.create(createUserInput),
       this.userGitService.create(createUserInput),
     ]).then((value) => value[0]);
@@ -28,8 +28,8 @@ export class UserService {
     return `This action removes a #${id} user`;
   }
 
-  async findOne(id: string): Promise<User> {
-    return await this.userDbService.findOne({ where: { user_id: id } });
+  findOne(id: string): Promise<User> {
+    return this.userDbService.findOne({ where: { user_id: id } });
   }
 
   async findByUsername(username: string): Promise<User> {

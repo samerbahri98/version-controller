@@ -6,12 +6,14 @@ import { UserModule } from '../user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Repo } from './entities/repo.entity';
 import { AuthModule } from '../auth/auth.module';
+import { GitServerModule } from '../git-server/git-server.module';
 
 @Module({
   providers: [RepoResolver, RepoService],
   exports: [RepoService],
   imports: [
     DownloadableModule,
+    GitServerModule,
     forwardRef(() => UserModule),
     TypeOrmModule.forFeature([Repo]),
     forwardRef(() => AuthModule),
