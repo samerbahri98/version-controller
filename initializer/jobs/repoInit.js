@@ -5,7 +5,7 @@ const bareGitDirectory = "/var/git";
 const cloneGitDirectory = "/var/git/.clones";
 const gitContainer = docker.getContainer(process.env.GIT_SSH_SERVER);
 
-const repoInitPromise = (repo) => {
+const repoInitPromise = async (repo) => {
 	const cloneCmd = [
 		"git",
 		"clone",

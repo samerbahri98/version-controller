@@ -3,13 +3,13 @@ const { allReposDirInitPromise } = require("./repoInit");
 const { allHtpasswordPromise } = require("./htPasswordInit");
 const { allPublicKeysInitPromise } = require("./publicKeysInit");
 const sshPromise = require("./ssh");
+const { resetPromise } = require("./reset");
+const { restartPromise } = require("./restart");
 
-const jobs = [
-	// dbPromise,
-	// sshPromise,
-	allReposDirInitPromise(),
-	allHtpasswordPromise(),
-	allPublicKeysInitPromise(),
-];
-
-module.exports = { jobs };
+module.exports = {
+	resetPromise,
+	allReposDirInitPromise,
+	allHtpasswordPromise,
+	allPublicKeysInitPromise,
+	restartPromise,
+};

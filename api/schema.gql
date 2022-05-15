@@ -8,6 +8,24 @@ type Auth {
   user: User!
 }
 
+type Branch {
+  name: String!
+  repo: Repo!
+}
+
+type Commit {
+  commitMessage: String!
+  date: DateTime!
+  hash: String!
+  hashAbbv: String!
+  parentHash: String!
+  parentHashAbbv: String!
+  repo: Repo!
+  tree: Tree!
+  treeHash: String!
+  treeHashAbbv: String!
+}
+
 input CreateUserInput {
   email: String!
   first_name: String!
@@ -28,6 +46,7 @@ type Downloadable {
 }
 
 type Mutation {
+  createRepository(repository_name: String!): Repo!
   createUser(createUserInput: CreateUserInput!): User!
   register(email: String!, first_name: String!, last_name: String!, password: String!, phone: String!, username: String!): Auth!
   removeUser(id: Int!): User!
@@ -43,6 +62,7 @@ type PublicKey {
 
 type Query {
   currentUser: User!
+  findMasterHead(repository_id: String!): Commit!
   login(email: String!, password: String!): Auth!
 }
 
@@ -52,6 +72,13 @@ type Repo {
   download: Downloadable!
   repository_id: ID!
   repository_name: String!
+}
+
+type Tree {
+  branch: Branch!
+  files: [String!]!
+  path: String!
+  trees: [String!]!
 }
 
 type User {

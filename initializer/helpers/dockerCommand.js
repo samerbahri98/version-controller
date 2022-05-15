@@ -8,15 +8,13 @@ const dockerCommand = ({ Cmd, gitContainer }) =>
 				AttachStdout: true,
 			},
 			(err, exec) => {
+				console.log(Cmd);
 				if (err) reject(err);
-				exec.start(
-					{ hijack: true, stdin: true },
-					(err, stream) => {
-						if (err) reject(err);
-						resolve()
-						docker.modem.demuxStream(stream, process.stdout, process.stderr)
-					}
-				);
+				exec.start({ hijack: true, stdin: true }, (err, stream) => {
+					if (err) reject(err);
+					docker.modem.demuxStream(stream, process.stdout, process.stderr);
+					resolve();
+				});
 			}
 		);
 	});

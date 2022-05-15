@@ -37,21 +37,21 @@ services:
       - db
 
 
-  initializer:
-    build: ./initializer
-    links:
-      - db
-      - git-ssh-server
-    depends_on:
-      - db
-      - git-ssh-server
-    networks:
-      - app-network
-    container_name: initializer
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    env_file:
-      - .env
+  # initializer:
+  #   build: ./initializer
+  #   links:
+  #     - db
+  #     - git-ssh-server
+  #   depends_on:
+  #     - db
+  #     - git-ssh-server
+  #   networks:
+  #     - app-network
+  #   container_name: initializer
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   env_file:
+  #     - .env
       
   git-ssh-server:
     build: ./git-ssh-server
@@ -87,7 +87,9 @@ services:
     container_name: api
     volumes:
       - ./api:/var/www/app
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./git-volume:/var/git
+
+      - /var/run/docker.sock:/var/run/docker.sock
       # - ./git/vol/:/var/git
     networks:
       - app-network
