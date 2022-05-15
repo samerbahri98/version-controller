@@ -5,7 +5,7 @@ import Tree from '../tree/tree.model';
 
 @ObjectType()
 export class Commit implements ICommit {
-  @Field()
+  @Field(()=>Repo)
   repo: Repo;
 
   @Field()
@@ -32,6 +32,6 @@ export class Commit implements ICommit {
   @Field()
   date: Date;
 
-  @Field()
+  @Field(()=>Tree)
   tree: Tree;
 }

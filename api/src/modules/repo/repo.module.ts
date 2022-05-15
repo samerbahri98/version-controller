@@ -7,6 +7,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Repo } from './entities/repo.entity';
 import { AuthModule } from '../auth/auth.module';
 import { GitServerModule } from '../git-server/git-server.module';
+import { CommitModule } from '../commit/commit.module';
+import { BranchModule } from '../branch/branch.module';
 
 @Module({
   providers: [RepoResolver, RepoService],
@@ -17,6 +19,8 @@ import { GitServerModule } from '../git-server/git-server.module';
     forwardRef(() => UserModule),
     TypeOrmModule.forFeature([Repo]),
     forwardRef(() => AuthModule),
+    forwardRef(() => CommitModule),
+    forwardRef(() => BranchModule),
   ],
 })
 export class RepoModule {}

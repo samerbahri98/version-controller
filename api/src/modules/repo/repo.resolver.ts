@@ -12,14 +12,43 @@ import { forwardRef, Inject, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUserId } from '../auth/CurrentUserId.decorator';
 import { CreateRepoInput } from './dto/create-repo.input';
+import { CommitService } from '../commit/commit.service';
+import { Commit } from '../commit/commit.model';
+import { BranchService } from '../branch/branch.service';
 
 @Resolver(() => Repo)
 export class RepoResolver {
-  constructor(private readonly RepoService: RepoService) {}
+  constructor(
+    @Inject(forwardRef(() => RepoService))
+    private readonly RepoService: RepoService,
+    @Inject(forwardRef(() => CommitService))
+    private readonly commitService: CommitService,
+    @Inject(forwardRef(() => BranchService))
+    private readonly branchService: BranchService,
+  ) {}
 
+  //Downloadable
   @ResolveProperty(() => Downloadable, { name: 'download' })
   async download(@Parent() parent: Repo): Promise<Downloadable> {
     return await this.RepoService.getDownloadable(parent);
+  }
+
+  //masterHeadCommit
+  @ResolveProperty(() => Commit, { name: 'masterHeadCommit' })
+  async masterHeadCommit(@Parent() parent: Repo): Promise<Commit> {
+    return this.commitService.findMasterHead(
+      parent.created_by_id,
+      parent.repository_id,
+    );
+  }
+
+  //Branches
+  @ResolveProperty(() => [String], { name: 'branches' })
+  async branches(@Parent() parent: Repo): Promise<string[]> {
+    return this.branchService.findAllNames(
+      parent.created_by_id,
+      parent.repository_id,
+    );
   }
 
   @Mutation(() => Repo)

@@ -1,6 +1,6 @@
-import { IRepo } from "../repo/repo.interface";
+import { Repo } from "../repo/entities/repo.entity";
 
 export default interface IBranch{
-    repo:IRepo
+    repo:Repo
     name:string
 }

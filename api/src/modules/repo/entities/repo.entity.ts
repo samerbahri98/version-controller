@@ -10,6 +10,7 @@ import {
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { IRepo } from '../repo.interface';
 import { User } from 'src/modules/user/entities/user.entity';
+import { Commit } from 'src/modules/commit/commit.model';
 
 
 @ObjectType()
@@ -34,4 +35,13 @@ export class Repo extends BaseEntity implements IRepo {
   @Field()
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at!: Date;
+
+  @Field(()=>Commit)
+  masterHeadCommit: Commit;
+
+
+  @Field(()=>[String])
+  branches: string[];
+
+
 }

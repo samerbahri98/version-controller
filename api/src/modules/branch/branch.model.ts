@@ -5,7 +5,7 @@ import IBranch from './branch.interface';
 
 @ObjectType()
 export default class Branch implements IBranch {
-  @Field()
+  @Field(()=>Repo)
   repo: Repo;
   @Field()
   name: string;
