@@ -63,6 +63,7 @@ type PublicKey {
 type Query {
   currentUser: User!
   findMasterHead(repository_id: String!): Commit!
+  findRepo(repository_id: String!): Repo!
   login(email: String!, password: String!): Auth!
 }
 
@@ -71,6 +72,7 @@ type Repo {
   created_at: DateTime!
   created_by: User!
   download: Downloadable!
+  masterCommits: [Commit!]!
   masterHeadCommit: Commit!
   repository_id: ID!
   repository_name: String!

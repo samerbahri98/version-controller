@@ -8,4 +8,5 @@ export interface IRepo {
     created_at: Date;
     masterHeadCommit: Commit
     branches: string[]
+    masterCommits: Commit[]
 }

@@ -4,6 +4,7 @@ import {
   Parent,
   Mutation,
   Args,
+  Query
 } from '@nestjs/graphql';
 import { RepoService } from './repo.service';
 import { Repo } from './entities/repo.entity';
@@ -51,6 +52,14 @@ export class RepoResolver {
     );
   }
 
+  @ResolveProperty(() => [Commit], { name: 'masterCommits' })
+  async masterCommits(@Parent() parent: Repo): Promise<Commit[]> {
+    return this.commitService.findAll(
+      parent.created_by_id,
+      parent.repository_id,
+      'master',
+    );
+  }
   @Mutation(() => Repo)
   @UseGuards(JwtAuthGuard)
   async createRepository(
@@ -58,5 +67,10 @@ export class RepoResolver {
     @Args('repository_name') repository_name: string,
   ): Promise<Repo> {
     return this.RepoService.create({ repository_name }, user_id);
+  }
+
+  @Query(()=>Repo)
+  async findRepo(@Args('repository_id') repository_id: string): Promise<Repo> {
+    return await this.RepoService.findOne(repository_id);
   }
 }

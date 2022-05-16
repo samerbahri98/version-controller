@@ -12,7 +12,7 @@ import { useAppendRepoListContext } from "../../Contexts/UserContexts";
 
 const ADD_REPO_MUTATION = gql`
   mutation ($repository_name: String!) {
-    create_repository(repository_name: $repository_name) {
+    createRepository(repository_name: $repository_name) {
       repository_id
       repository_name
       download {
@@ -25,7 +25,7 @@ const ADD_REPO_MUTATION = gql`
 `;
 
 interface IAddRepoPayload {
-  create_repository: IRepo;
+  createRepository: IRepo;
 }
 interface IAddRepoFields {
   repository_name: String;
@@ -46,7 +46,7 @@ function AddModal() {
   useEffect(() => {
     if (loading) setPending(true);
     if (pending && data && appendRepoList) {
-      appendRepoList(data.create_repository);
+      appendRepoList(data.createRepository);
       toggleAddRepoContext(false);
       setPending(false);
     }

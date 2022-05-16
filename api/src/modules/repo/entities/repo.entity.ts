@@ -16,6 +16,7 @@ import { Commit } from 'src/modules/commit/commit.model';
 @ObjectType()
 @Entity({ name: 'repositories' })
 export class Repo extends BaseEntity implements IRepo {
+
   @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
   repository_id!: string;
@@ -43,5 +44,6 @@ export class Repo extends BaseEntity implements IRepo {
   @Field(()=>[String])
   branches: string[];
 
-
+  @Field(()=>[Commit])
+  masterCommits: Commit[];
 }

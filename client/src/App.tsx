@@ -15,98 +15,101 @@ import { UserProvider } from "./Contexts/UserContexts";
 import Logout from "./Pages/Logout";
 import { Slide, ToastContainer } from "react-toastify";
 import Repo from "./Pages/Repo/Repo";
+import { RepoLayoutProvider } from "./Contexts/RepoContext";
 
 function App() {
   return (
     <DashboardLayoutProvider>
       <UserProvider>
-        <Router>
-          <Routes>
-            {localStorage.getItem("accessToken") === null ? (
-              <Route
-                path="/"
-                element={
-                  <>
-                    <ToastContainer
-                      icon={false}
-                      hideProgressBar={true}
-                      newestOnTop={true}
-                      transition={Slide}
-                    />
-
-                    <Landing />
-                  </>
-                }
-              />
-            ) : (
-              <>
+        <RepoLayoutProvider>
+          <Router>
+            <Routes>
+              {localStorage.getItem("accessToken") === null ? (
                 <Route
                   path="/"
                   element={
                     <>
-                      <Navbar />
+                      <ToastContainer
+                        icon={false}
+                        hideProgressBar={true}
+                        newestOnTop={true}
+                        transition={Slide}
+                      />
 
-                      <ToastContainer
-                        icon={false}
-                        hideProgressBar={true}
-                        newestOnTop={true}
-                        transition={Slide}
-                      />
-                      <Dashboard />
+                      <Landing />
                     </>
                   }
                 />
-                <Route
-                  path="/repo/:id"
-                  element={
-                    <>
-                      <Navbar />
-                      <ToastContainer
-                        icon={false}
-                        hideProgressBar={true}
-                        newestOnTop={true}
-                        transition={Slide}
-                      />
-                      <Repo />
-                    </>
-                  }
-                >
-                  <Route path="commits"></Route>
-                  <Route path="branches"></Route>
-                </Route>
-                <Route
-                  path="/ssh-settings"
-                  element={
-                    <>
-                      <Navbar />
-                      <SshSettings />
-                    </>
-                  }
-                />
-                <Route
-                  path="/about"
-                  element={
-                    <>
-                      <Navbar />
-                      <About />
-                    </>
-                  }
-                />
-                <Route
-                  path="/help"
-                  element={
-                    <>
-                      <Navbar />
-                      <Help />
-                    </>
-                  }
-                />
-                <Route path="/logout" element={<Logout />} />
-              </>
-            )}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Router>
+              ) : (
+                <>
+                  <Route
+                    path="/"
+                    element={
+                      <>
+                        <Navbar />
+
+                        <ToastContainer
+                          icon={false}
+                          hideProgressBar={true}
+                          newestOnTop={true}
+                          transition={Slide}
+                        />
+                        <Dashboard />
+                      </>
+                    }
+                  />
+                  <Route
+                    path="/repo/:id"
+                    element={
+                      <>
+                        <Navbar />
+                        <ToastContainer
+                          icon={false}
+                          hideProgressBar={true}
+                          newestOnTop={true}
+                          transition={Slide}
+                        />
+                        <Repo />
+                      </>
+                    }
+                  >
+                    <Route path="commits"></Route>
+                    <Route path="branches"></Route>
+                  </Route>
+                  <Route
+                    path="/ssh-settings"
+                    element={
+                      <>
+                        <Navbar />
+                        <SshSettings />
+                      </>
+                    }
+                  />
+                  <Route
+                    path="/about"
+                    element={
+                      <>
+                        <Navbar />
+                        <About />
+                      </>
+                    }
+                  />
+                  <Route
+                    path="/help"
+                    element={
+                      <>
+                        <Navbar />
+                        <Help />
+                      </>
+                    }
+                  />
+                  <Route path="/logout" element={<Logout />} />
+                </>
+              )}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Router>
+        </RepoLayoutProvider>
       </UserProvider>
     </DashboardLayoutProvider>
   );

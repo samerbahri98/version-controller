@@ -102,6 +102,27 @@ services:
     # command: sh -c 'npm install && npm run compile && npm run start'
     command: sh -c 'npm install && npm run start:dev'
 
+  client:
+    build: ./DockerImages/react/
+    image: react
+    env_file:
+      - .env
+    restart: always
+    container_name: client
+    volumes:
+      - ./client:/var/www/app
+    networks:
+      - app-network
+    environment:
+      - PORT=3000
+      - REACT_APP_API_URI=http://localhost:1337/graphql/
+    links:
+      - api
+    depends_on:
+      - "api"
+    ports:
+      - "3000:3000"
+    command: sh -c 'npm install && npm start'
 
 
 networks:

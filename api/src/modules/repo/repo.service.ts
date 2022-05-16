@@ -47,6 +47,7 @@ export class RepoService {
     await this.gitCmdService.cloneGitRepo(repoDir, repoDirClone);
     await this.gitCmdService.changeDirGitGroup(repoDirClone);
     await this.gitCmdService.changeDirGitOwn(repoDirClone);
+    await this.gitCmdService.safeDirectory(repoDirClone);
     await this.gitCmdService.changeDirGitMod(repoDirClone);
 
     return repoRecord;
@@ -62,8 +63,8 @@ export class RepoService {
   private getRepoDirClone = (username: string, repo: string) =>
     `/var/git/.clones/${username}/${repo}`;
 
-  async findOne(id: string) {
-    return await Repo.findOneBy({ repository_id: id });
+  async findOne(id: string): Promise<Repo> {
+    return Repo.findOneBy({ repository_id: id });
   }
 
   async findAllByUserId(created_by_id: string) {
