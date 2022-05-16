@@ -16,103 +16,136 @@ import Logout from "./Pages/Logout";
 import { Slide, ToastContainer } from "react-toastify";
 import Repo from "./Pages/Repo/Repo";
 import { RepoLayoutProvider } from "./Contexts/RepoContext";
+import Tree from "./Pages/Tree";
+import FileBlob from "./Pages/FileBlob";
+
+import { TreeLayoutProvider } from "./Contexts/TreeContext";
+import { FileBlobLayoutProvider } from "./Contexts/FileBlobContext";
 
 function App() {
-  return (
-    <DashboardLayoutProvider>
-      <UserProvider>
-        <RepoLayoutProvider>
-          <Router>
-            <Routes>
-              {localStorage.getItem("accessToken") === null ? (
-                <Route
-                  path="/"
-                  element={
-                    <>
-                      <ToastContainer
-                        icon={false}
-                        hideProgressBar={true}
-                        newestOnTop={true}
-                        transition={Slide}
-                      />
+	return (
+		<DashboardLayoutProvider>
+			<UserProvider>
+				<Router>
+					<Routes>
+						{localStorage.getItem("accessToken") === null ? (
+							<Route
+								path="/"
+								element={
+									<>
+										<ToastContainer
+											icon={false}
+											hideProgressBar={true}
+											newestOnTop={true}
+											transition={Slide}
+										/>
 
-                      <Landing />
-                    </>
-                  }
-                />
-              ) : (
-                <>
-                  <Route
-                    path="/"
-                    element={
-                      <>
-                        <Navbar />
+										<Landing />
+									</>
+								}
+							/>
+						) : (
+							<>
+								<Route
+									path="/"
+									element={
+										<>
+											<Navbar />
 
-                        <ToastContainer
-                          icon={false}
-                          hideProgressBar={true}
-                          newestOnTop={true}
-                          transition={Slide}
-                        />
-                        <Dashboard />
-                      </>
-                    }
-                  />
-                  <Route
-                    path="/repo/:id"
-                    element={
-                      <>
-                        <Navbar />
-                        <ToastContainer
-                          icon={false}
-                          hideProgressBar={true}
-                          newestOnTop={true}
-                          transition={Slide}
-                        />
-                        <Repo />
-                      </>
-                    }
-                  >
-                    <Route path="commits"></Route>
-                    <Route path="branches"></Route>
-                  </Route>
-                  <Route
-                    path="/ssh-settings"
-                    element={
-                      <>
-                        <Navbar />
-                        <SshSettings />
-                      </>
-                    }
-                  />
-                  <Route
-                    path="/about"
-                    element={
-                      <>
-                        <Navbar />
-                        <About />
-                      </>
-                    }
-                  />
-                  <Route
-                    path="/help"
-                    element={
-                      <>
-                        <Navbar />
-                        <Help />
-                      </>
-                    }
-                  />
-                  <Route path="/logout" element={<Logout />} />
-                </>
-              )}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Router>
-        </RepoLayoutProvider>
-      </UserProvider>
-    </DashboardLayoutProvider>
-  );
+											<ToastContainer
+												icon={false}
+												hideProgressBar={true}
+												newestOnTop={true}
+												transition={Slide}
+											/>
+											<Dashboard />
+										</>
+									}
+								/>
+								<Route
+									path="/repo/:id/"
+									element={
+										<RepoLayoutProvider>
+											<Navbar />
+											<ToastContainer
+												icon={false}
+												hideProgressBar={true}
+												newestOnTop={true}
+												transition={Slide}
+											/>
+											<Repo />
+										</RepoLayoutProvider>
+									}
+								>
+									<Route path="commits"></Route>
+									<Route path="branches"></Route>
+								</Route>
+								<Route
+									path="/repo/:id/tree/:branch/*"
+									element={
+										<TreeLayoutProvider>
+											<Navbar />
+											<ToastContainer
+												icon={false}
+												hideProgressBar={true}
+												newestOnTop={true}
+												transition={Slide}
+											/>
+											<Tree />
+										</TreeLayoutProvider>
+									}
+								></Route>
+								<Route
+									path="/repo/:id/blob/:branch/*"
+									element={
+										<FileBlobLayoutProvider>
+											<Navbar />
+											<ToastContainer
+												icon={false}
+												hideProgressBar={true}
+												newestOnTop={true}
+												transition={Slide}
+											/>
+											<FileBlob /> 
+										</FileBlobLayoutProvider>
+									}
+								></Route>
+								<Route
+									path="/ssh-settings"
+									element={
+										<>
+											<Navbar />
+											<SshSettings />
+										</>
+									}
+								/>
+								<Route
+									path="/about"
+									element={
+										<>
+											<Navbar />
+											<About />
+										</>
+									}
+								/>
+								<Route
+									path="/help"
+									element={
+										<>
+											<Navbar />
+											<Help />
+										</>
+									}
+								/>
+								<Route path="/logout" element={<Logout />} />
+							</>
+						)}
+						<Route path="*" element={<NotFound />} />
+					</Routes>
+				</Router>
+			</UserProvider>
+		</DashboardLayoutProvider>
+	);
 }
 
 export default App;

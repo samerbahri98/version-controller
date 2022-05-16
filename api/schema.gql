@@ -45,6 +45,13 @@ type Downloadable {
   ssh: String!
 }
 
+type FileBlob {
+  branch: Branch!
+  content: String!
+  name: String!
+  path: String!
+}
+
 type Mutation {
   createRepository(repository_name: String!): Repo!
   createUser(createUserInput: CreateUserInput!): User!
@@ -62,8 +69,10 @@ type PublicKey {
 
 type Query {
   currentUser: User!
+  findFileByBranch(branch_name: String!, path: String!, repository_id: String!): FileBlob!
   findMasterHead(repository_id: String!): Commit!
   findRepo(repository_id: String!): Repo!
+  findTreeByBranch(branch_name: String!, path: String!, repository_id: String!): Tree!
   login(email: String!, password: String!): Auth!
 }
 

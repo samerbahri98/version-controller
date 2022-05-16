@@ -19,6 +19,8 @@ import {
 	useRepo,
 } from "../../Contexts/RepoContext";
 import { useLocation } from "react-router";
+import { useFetchTree, useTree } from "../../Contexts/TreeContext";
+import { Link } from "react-router-dom";
 
 const renderSwitch = (param: string | null, records: ITableCell[]) => {
 	switch (param) {
@@ -30,33 +32,31 @@ const renderSwitch = (param: string | null, records: ITableCell[]) => {
 			return <> </>;
 	}
 };
-function Repo() {
+
+function Tree() {
 	const dashboardLayout = useDashboardLayout();
-	const repoLayout = useRepo();
-	const fetchRepoLayout = useFetchRepo();
+	const treeLayout = useTree();
+	const fetchTreeLayout = useFetchTree();
 	const [folder, setFolder] = useState<ITableCell[]>([]);
 	const location = useLocation();
 	const repository_id = location.pathname.split("/")[2];
+	const branch_name = location.pathname.split("/")[4];
+	const path = location.pathname.split("/").slice(5).join("/") + "/";
+
+
 	useEffect(() => {
-		if (fetchRepoLayout)
-			fetchRepoLayout({
+		if (fetchTreeLayout)
+			fetchTreeLayout({
 				repository_id,
+				branch_name,
+				path,
 			});
 	}, []);
 
 	useEffect(() => {
-		if (repoLayout)
+		if (treeLayout)
 			setFolder([
-				...repoLayout.masterHeadCommit.tree.trees.map(
-					(f) =>
-						({
-							id: f,
-							name: f,
-							icon: faFolder,
-							link: `/repo/${repository_id}/tree/${repoLayout.branches[0]}/${repoLayout.masterHeadCommit.tree.path}/${f}`,
-						} as ITableCell)
-				),
-				...repoLayout.masterHeadCommit.tree.files.map(
+				...treeLayout.files.map(
 					(f) =>
 						({
 							id: f,
@@ -65,28 +65,30 @@ function Repo() {
 							link: `/repo/${repository_id}/blob/${f}`,
 						} as ITableCell)
 				),
+				...treeLayout.trees.map(
+					(f) =>
+						({
+							id: f,
+							name: f,
+							icon: faFolder,
+							link: `/repo/${repository_id}/tree/${treeLayout.path}/${f}`,
+						} as ITableCell)
+				),
 			]);
-	}, [repoLayout]);
+	}, [treeLayout]);
 
 	return (
 		<div className="notification">
 			{/* <InfoModal /> */}
 			<nav className="panel">
-				<p className="panel-heading">{repoLayout?.repository_name}</p>
+				<Link to={`/repo/${repository_id}`} style={{ textDecoration: "none" }}>
+					<p className="panel-heading">{treeLayout?.path}</p>
+				</Link>
 				<RepoSettingsBar />
 				{renderSwitch(dashboardLayout, folder)}
 			</nav>
-
-			{/* <nav className="panel">
-				<p className="panel-heading">Readme.md</p>
-				<div className="panel-block">
-					<div className="content">
-						<ReactMarkdown children={md} remarkPlugins={[gfm]} />
-					</div>
-				</div>
-			</nav> */}
 		</div>
 	);
 }
 
-export default Repo;
+export default Tree;
