@@ -1,7 +1,7 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { IRepo } from '../repo/repo.interface';
 import * as shell from 'shelljs';
-import { RepoService } from '../repo/repo.service';
+import { RepoService } from '../repo/services/repo.service';
 import { UserService } from '../user/services/user.service';
 
 @Injectable()

@@ -21,6 +21,7 @@ import FileBlob from "./Pages/FileBlob";
 
 import { TreeLayoutProvider } from "./Contexts/TreeContext";
 import { FileBlobLayoutProvider } from "./Contexts/FileBlobContext";
+import FileEdit from "./Pages/FileEdit";
 
 function App() {
 	return (
@@ -106,7 +107,22 @@ function App() {
 												newestOnTop={true}
 												transition={Slide}
 											/>
-											<FileBlob /> 
+											<FileBlob />
+										</FileBlobLayoutProvider>
+									}
+								></Route>
+								<Route
+									path="/repo/:id/edit/:branch/*"
+									element={
+										<FileBlobLayoutProvider>
+											<Navbar />
+											<ToastContainer
+												icon={false}
+												hideProgressBar={true}
+												newestOnTop={true}
+												transition={Slide}
+											/>
+											<FileEdit />
 										</FileBlobLayoutProvider>
 									}
 								></Route>

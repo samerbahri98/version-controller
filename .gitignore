@@ -13,5 +13,6 @@ api.bak3
 logs
 worker-queue.bak
 .env
-git-volume
+git-volume*
 initializer/node_modules
+api/.clones

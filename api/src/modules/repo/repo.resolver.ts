@@ -6,7 +6,7 @@ import {
   Args,
   Query
 } from '@nestjs/graphql';
-import { RepoService } from './repo.service';
+import { RepoService } from './services/repo.service';
 import { Repo } from './entities/repo.entity';
 import { Downloadable } from '../downloadable/downloadable.model';
 import { forwardRef, Inject, UseGuards } from '@nestjs/common';

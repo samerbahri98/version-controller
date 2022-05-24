@@ -53,6 +53,7 @@ type FileBlob {
 }
 
 type Mutation {
+  createCommit(createCommitInput: createCommitInput!): Commit!
   createRepository(repository_name: String!): Repo!
   createUser(createUserInput: CreateUserInput!): User!
   register(email: String!, first_name: String!, last_name: String!, password: String!, phone: String!, username: String!): Auth!
@@ -105,4 +106,13 @@ type User {
   repositories: [Repo!]!
   user_id: ID!
   username: String!
+}
+
+input createCommitInput {
+  branch: String!
+  commit_message: String!
+  content: String!
+  name: String!
+  path: String!
+  repository_id: String!
 }

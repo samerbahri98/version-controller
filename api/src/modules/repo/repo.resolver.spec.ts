@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { RepoResolver } from './repo.resolver';
-import { RepoService } from './repo.service';
+import { RepoService } from './services/repo.service';
 
 describe('RepoResolver', () => {
   let resolver: RepoResolver;

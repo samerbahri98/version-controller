@@ -25,6 +25,7 @@ export class AuthService {
     password = password.replace('a', 'y');
     const createUserInput = credentials;
     createUserInput['password'] = password;
+    createUserInput['unencryptedPassword'] = credentials.password
     return await this.userService.create(createUserInput);
   }
 

@@ -13,11 +13,12 @@ export class UserService {
     private readonly userDbService: UserDbService,
   ) {}
 
-  create(createUserInput: CreateUserInput): Promise<User> {
-    return Promise.all([
+  async create(createUserInput: CreateUserInput): Promise<User> {
+    const value = await Promise.all([
       this.userDbService.create(createUserInput),
       this.userGitService.create(createUserInput),
-    ]).then((value) => value[0]);
+    ]);
+    return value[0];
   }
 
   async findAll(): Promise<User[]> {

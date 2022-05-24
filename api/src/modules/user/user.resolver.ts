@@ -14,7 +14,7 @@ import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { PublicKeyService } from '../public-key/public-key.service';
 import { PublicKey } from '../public-key/entities/public-key.entity';
-import { RepoService } from '../repo/repo.service';
+import { RepoService } from '../repo/services/repo.service';
 import { Repo } from '../repo/entities/repo.entity';
 import { forwardRef, Inject, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';

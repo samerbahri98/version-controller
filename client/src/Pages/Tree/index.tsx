@@ -62,7 +62,7 @@ function Tree() {
 							id: f,
 							name: f,
 							icon: faFile,
-							link: `/repo/${repository_id}/blob/${f}`,
+							link: `/repo/${repository_id}/blob/${branch_name}/${treeLayout.path}${f}`,
 						} as ITableCell)
 				),
 				...treeLayout.trees.map(
@@ -84,7 +84,7 @@ function Tree() {
 				<Link to={`/repo/${repository_id}`} style={{ textDecoration: "none" }}>
 					<p className="panel-heading">{treeLayout?.path}</p>
 				</Link>
-				<RepoSettingsBar />
+				{/* <RepoSettingsBar /> */}
 				{renderSwitch(dashboardLayout, folder)}
 			</nav>
 		</div>

@@ -1,6 +1,6 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { resolve } from 'path';
-import { RepoService } from '../repo/repo.service';
+import { RepoService } from '../repo/services/repo.service';
 import { UserService } from '../user/services/user.service';
 import Tree from './tree.model';
 import * as shell from 'shelljs';

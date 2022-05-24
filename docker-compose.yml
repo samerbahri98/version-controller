@@ -53,17 +53,17 @@ services:
   #   env_file:
   #     - .env
       
-  git-ssh-server:
-    build: ./git-ssh-server
-    container_name: git-ssh-server
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "22:22"
-    networks:
-      - app-network
-    volumes:
-      - ./git-volume:/var/git
+  # git-ssh-server:
+  #   build: ./git-ssh-server
+  #   container_name: git-ssh-server
+  #   restart: unless-stopped
+  #   ports:
+  #     - "80:80"
+  #     - "22:22"
+  #   networks:
+  #     - app-network
+  #   volumes:
+  #     - git-volume:/var/git
   # api:
   #   build: ./api
   #   container_name: api
@@ -79,17 +79,17 @@ services:
   #     - ACCESS_TOKEN_SECRET="ACCESS_TOKEN_SECRET"
   #     - REFRESH_TOKEN_SECRET="REFRESH_TOKEN_SECRET"
   api:
-    build: ./DockerImages/node/
+    build: ./api
+    # image: api:latest
     env_file:
       - .env
-    image: node
     restart: always
     container_name: api
     volumes:
       - ./api:/var/www/app
-      - ./git-volume:/var/git
+      - git-volume:/var/git
 
-      - /var/run/docker.sock:/var/run/docker.sock
+      # - /var/run/docker.sock:/var/run/docker.sock
       # - ./git/vol/:/var/git
     networks:
       - app-network
@@ -99,8 +99,10 @@ services:
       - REFRESH_TOKEN_SECRET="REFRESH_TOKEN_SECRET"
     ports:
       - "1337:1337"
+      - "80:80"
+      - "22:22"
     # command: sh -c 'npm install && npm run compile && npm run start'
-    command: sh -c 'npm install && npm run start:dev'
+    command: su -c 'npm install && npm run start:dev' node
 
   client:
     build: ./DockerImages/react
@@ -124,6 +126,8 @@ services:
       - "3000:3000"
     command: sh -c 'npm install && npm start'
 
+volumes:
+  git-volume:
 
 networks:
   app-network:
